@@ -10,21 +10,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model chats {
+model Chats {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   chatName    String
   isGroupChat Boolean
+
+  userIds String[] @db.ObjectId
+  users   Users[]  @relation(name: "Users", fields: [userIds], references: [id])
+
+  adminIds String[] @db.ObjectId
+  admins   Users[]  @relation(name: "Admins",fields: [adminIds], references: [id])
 }
 
-model users {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+model Users {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
   name     String
   email    String
   password String
   isAdmin  Boolean
+  chats    Chats[]  @relation(name: "Users",fields: [chatIds], references: [id])
+  chatIds  String[] @db.ObjectId
+  adminChats    Chats[]  @relation(name: "Admins",fields: [adminChatIds], references: [id])
+  adminChatIds  String[] @db.ObjectId
 }
 
-model messages{
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-
+model Messages {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 }
