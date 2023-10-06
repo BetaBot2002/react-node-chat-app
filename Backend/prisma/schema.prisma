@@ -23,6 +23,9 @@ model Chats {
 
   lastMessage   Messages? @relation(fields: [lastMessageId], references: [id])
   lastMessageId String?   @unique @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Users {
@@ -42,6 +45,9 @@ model Users {
 
   readIds String[]   @db.ObjectId
   read    Messages[] @relation(name: "Read",fields: [readIds],references: [id])
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Messages {
@@ -55,4 +61,7 @@ model Messages {
   readers    Users[]  @relation(name: "Read", fields: [readersIds], references: [id])
 
   chat Chats?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
