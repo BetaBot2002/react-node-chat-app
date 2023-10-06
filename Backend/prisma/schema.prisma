@@ -9,3 +9,22 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model chats {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  chatName    String
+  isGroupChat Boolean
+}
+
+model users {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  email    String
+  password String
+  isAdmin  Boolean
+}
+
+model messages{
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+
+}
