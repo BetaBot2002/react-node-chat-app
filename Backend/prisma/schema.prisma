@@ -18,25 +18,41 @@ model Chats {
   userIds String[] @db.ObjectId
   users   Users[]  @relation(name: "Users", fields: [userIds], references: [id])
 
-  adminIds    String[]  @db.ObjectId
-  admins      Users[]   @relation(name: "Admins", fields: [adminIds], references: [id])
-  lastMessage Messages? @relation(fields: [lastMessageId], references: [id])
-  lastMessageId  String?   @db.ObjectId @unique
+  adminIds String[] @db.ObjectId
+  admins   Users[]  @relation(name: "Admins", fields: [adminIds], references: [id])
+
+  lastMessage   Messages? @relation(fields: [lastMessageId], references: [id])
+  lastMessageId String?   @unique @db.ObjectId
 }
 
 model Users {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  email        String
-  password     String
-  isAdmin      Boolean
-  chats        Chats[]  @relation(name: "Users", fields: [chatIds], references: [id])
-  chatIds      String[] @db.ObjectId
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  email    String
+  password String
+  isAdmin  Boolean
+
+  chats   Chats[]  @relation(name: "Users", fields: [chatIds], references: [id])
+  chatIds String[] @db.ObjectId
+
   adminChats   Chats[]  @relation(name: "Admins", fields: [adminChatIds], references: [id])
   adminChatIds String[] @db.ObjectId
+
+  messages Messages[]
+
+  readIds String[]   @db.ObjectId
+  read    Messages[] @relation(name: "Read",fields: [readIds],references: [id])
 }
 
 model Messages {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  content String
+
+  senderId String? @db.ObjectId
+  sender   Users?  @relation(fields: [senderId], references: [id])
+
+  readersIds String[] @db.ObjectId
+  readers    Users[]  @relation(name: "Read", fields: [readersIds], references: [id])
+
   chat Chats?
 }
