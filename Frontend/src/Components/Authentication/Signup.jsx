@@ -25,7 +25,10 @@ const Signup = () => {
           <Input
             type={isShown?'text':'password'}
             placeholder='Enter Your Password'
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value)
+              setIsConfirmed(confirmPassword===e.target.value)
+            }}
             borderColor={Colors.theme_lavender}
           />
           <InputRightElement w={'80px'}>
@@ -51,7 +54,11 @@ const Signup = () => {
               setConfirmPassword(e.target.value)
               setIsConfirmed(password===e.target.value)
             }}
-            borderColor={isConfirmed?Colors.theme_light_green:Colors.theme_lavender}
+            borderColor={isConfirmed?Colors.theme_light_green:Colors.theme_bold_red}
+            focusBorderColor={isConfirmed?Colors.theme_light_green:Colors.theme_bold_red}
+            _hover={{
+              borderColor:isConfirmed?Colors.theme_light_green:Colors.theme_bold_red
+            }}
           />
           <InputRightElement w={'80px'}>
             <Button
