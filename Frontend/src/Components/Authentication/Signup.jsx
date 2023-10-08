@@ -14,6 +14,10 @@ const Signup = () => {
 
   }
 
+  const submitHandler = () => {
+
+  }
+
   return (
     <VStack spacing={'15px'}>
       <FormControl id='email' isRequired>
@@ -95,6 +99,15 @@ const Signup = () => {
           border={'none'}
         />
       </FormControl>
+
+      <Button
+        w={'100%'}
+        colorScheme='purple'
+        marginTop={'15px'}
+        onClick={submitHandler}
+      >
+        Sign Up
+      </Button>
     </VStack>
   )
 }
