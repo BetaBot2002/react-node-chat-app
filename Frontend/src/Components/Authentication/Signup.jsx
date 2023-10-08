@@ -85,7 +85,7 @@ const Signup = () => {
           {confirmPassword === '' || isConfirmed ? '' : 'Must be same as password'}
         </Text>
       </FormControl>
-      <FormControl>
+      <FormControl id='picture'>
         <FormLabel>Upload Profile Picture</FormLabel>
         <Input
           type='file'
