@@ -2,4 +2,5 @@
     color: var(--theme-light) ;
     min-height: 100vh;
     background-color: var(--theme-dark);
+    font-family: Arial, Helvetica, sans-serif;
 }
