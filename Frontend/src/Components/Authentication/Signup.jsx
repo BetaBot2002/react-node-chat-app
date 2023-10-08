@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 
 const Signup = () => {
   const [isShown, setIsShown] = useState(false)
+  const [isConfirmShown, setIsConfirmShown] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -31,6 +32,27 @@ const Signup = () => {
               }}
             >
               {isShown ? 'Hide' : 'Show'}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+      </FormControl>
+
+      <FormControl id='confirm-password' isRequired>
+        <FormLabel>Confirm Password</FormLabel>
+        <InputGroup>
+          <Input
+            type={isConfirmShown?'text':'password'}
+            placeholder='Confirm Your Password'
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <InputRightElement w={'80px'}>
+            <Button
+              variant={'unstyled'}
+              onClick={()=>{
+                setIsConfirmShown(!isConfirmShown)
+              }}
+            >
+              {isConfirmShown ? 'Hide' : 'Show'}
             </Button>
           </InputRightElement>
         </InputGroup>
