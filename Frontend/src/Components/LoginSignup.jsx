@@ -24,6 +24,7 @@ const LoginSignup = () => {
           fontFamily={'Helvetica'}
           fontWeight={'bold'}
           letterSpacing={'2px'}
+          color={Colors.theme_lavender}
         >Chattery 🦆</Text>
       </Box>
       <Box
