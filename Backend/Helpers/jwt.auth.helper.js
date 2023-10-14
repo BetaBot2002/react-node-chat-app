@@ -1,16 +1,33 @@
 import jwt from 'jsonwebtoken'
+import { CustomStatusCodes } from '../Utilities/CustomStatusCodes.js'
 
-const tokenExpiryTime=15
+const tokenExpiryTime = 15
 
-const signUser=(email)=>{
-    const AccessToken=jwt.sign({email:email},process.env.ACCESS_TOKEN_SECRET,{expiresIn:tokenExpiryTime})
-    const RefreshToken=jwt.sign({email:email},process.env.REFRESH_TOKEN_SECRET,{expiresIn:tokenExpiryTime})
+const signUser = (email) => {
+    const AccessToken = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: tokenExpiryTime })
+    const RefreshToken = jwt.sign({ email: email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: tokenExpiryTime })
     return {
-        accessToken:AccessToken,
-        refreshToken:RefreshToken
+        accessToken: AccessToken,
+        refreshToken: RefreshToken
+    }
+}
+
+const verifyToken = (token, type) => {
+    try {
+        const decodedToken = type.toUpperCase() === "REFRESH" ? jwt.verify(token, process.env.REFRESH_TOKEN_SECRET) : jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        return {
+            "status":CustomStatusCodes.SUCCESS,
+            "decoded":decodedToken
+        }
+    } catch (error) {
+        return {
+            "status":CustomStatusCodes.INVALID_TOKEN,
+            "message":error.message
+        }
     }
 }
 
 export {
-    signUser
+    signUser,
+    verifyToken
 }
