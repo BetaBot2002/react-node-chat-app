@@ -27,7 +27,15 @@ const verifyToken = (token, type) => {
     }
 }
 
+const newAccessToken=(email)=>{
+    const AccessToken = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: tokenExpiryTime })
+    return {
+        accessToken:AccessToken
+    }
+}
+
 export {
     signUser,
-    verifyToken
+    verifyToken,
+    newAccessToken
 }
