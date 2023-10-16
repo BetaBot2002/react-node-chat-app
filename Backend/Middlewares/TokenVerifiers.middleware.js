@@ -1,3 +1,4 @@
+import { isBlacklisted } from "../Database/BlackListedTokens.query"
 import { verifyToken } from "../Helpers/jwt.auth.helper"
 
 const verifyAccessToken=(req,res,next)=>{
@@ -18,7 +19,7 @@ const verifyAccessToken=(req,res,next)=>{
 
 const verifyRefreshToken=(req,res,next)=>{
     const token=req.token
-    const isBlacklisted=false
+    const isBlacklisted=isBlacklisted(token)
     if(!isBlacklisted){
         const payload=verifyToken(token,"REFRESH")
 
