@@ -17,9 +17,9 @@ const verifyAccessToken=(req,res,next)=>{
     }
 }
 
-const verifyRefreshToken=(req,res,next)=>{
+const verifyRefreshToken=async (req,res,next)=>{
     const token=req.token
-    const isTokenBlacklisted=isBlacklisted(token)
+    const isTokenBlacklisted=await isBlacklisted(token)
     if(!isTokenBlacklisted){
         const payload=verifyToken(token,"REFRESH")
 
