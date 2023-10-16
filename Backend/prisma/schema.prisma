@@ -44,8 +44,8 @@ model Users {
   messages Messages[]
 
   readIds String[]   @db.ObjectId
-  read    Messages[] @relation(name: "Read",fields: [readIds],references: [id])
-  
+  read    Messages[] @relation(name: "Read", fields: [readIds], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -61,7 +61,12 @@ model Messages {
   readers    Users[]  @relation(name: "Read", fields: [readersIds], references: [id])
 
   chat Chats?
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model BlackListedTokens {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  token String @unique
 }
