@@ -19,8 +19,8 @@ const verifyAccessToken=(req,res,next)=>{
 
 const verifyRefreshToken=(req,res,next)=>{
     const token=req.token
-    const isBlacklisted=isBlacklisted(token)
-    if(!isBlacklisted){
+    const isTokenBlacklisted=isBlacklisted(token)
+    if(!isTokenBlacklisted){
         const payload=verifyToken(token,"REFRESH")
 
         if(!payload.status===200){
