@@ -1,30 +1,34 @@
 import { findSingleUser } from "../Database/Users.query";
-import { signUser,newAccessToken, newAccessToken } from "../Helpers/jwt.auth.helper";
+import { signUser, newAccessToken } from "../Helpers/jwt.auth.helper";
+import { CustomStatusCodes } from "../Utilities/CustomStatusCodes";
 
 const login=async (req,res)=>{
     const {email,password} = req.body
     const user=await findSingleUser(email,password)
 
     if(!user){
-        res.status(404).send({
-            message:"USER_NOT_FOUND"
+        res.status(CustomStatusCodes.USER_NOT_FOUND).send({
+            message:"USER_NOT_FOUND",
+            code:CustomStatusCodes.USER_NOT_FOUND
         })
 
     }else{
         const {accesstoken,refreshtoken}=signUser(email)
-        res.status(200).send({
+        res.status(CustomStatusCodes.SUCCESS).send({
             accessToken:accesstoken,
-            refreshToken:refreshtoken
+            refreshToken:refreshtoken,
+            code:CustomStatusCodes.SUCCESS
         })
     }
 }
 
 const refresh=async (req,res)=>{
     const {email}=req
-    const newAccessToken=newAccessToken(email)
+    const newaccesstoken= newAccessToken(email)
 
-    res.status(200).send({
-        accessToken:newAccessToken
+    res.status(CustomStatusCodes.SUCCESS).send({
+        accessToken:newaccesstoken,
+        code:CustomStatusCodes.SUCCESS
     })
 }
 
