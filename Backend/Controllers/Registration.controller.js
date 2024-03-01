@@ -1,5 +1,5 @@
-import { registerUser } from "../Database/Users.query";
-import { CustomStatusCodes } from "../Utilities/CustomStatusCodes";
+import { registerUser } from "../Database/Users.query.js";
+import { CustomStatusCodes } from "../Utilities/CustomStatusCodes.js";
 
 const register=async (req,res)=>{
     const {email,password}=req.body

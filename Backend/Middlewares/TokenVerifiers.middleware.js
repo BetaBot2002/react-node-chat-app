@@ -1,5 +1,5 @@
-import { isBlacklisted } from "../Database/BlackListedTokens.query"
-import { verifyToken } from "../Helpers/jwt.auth.helper"
+import { isBlacklisted } from "../Database/BlackListedTokens.query.js"
+import { verifyToken } from "../Helpers/jwt.auth.helper.js"
 
 const verifyAccessToken=(req,res,next)=>{
     const token=req.token

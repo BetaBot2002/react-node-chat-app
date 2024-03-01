@@ -1,6 +1,6 @@
-import { findSingleUser } from "../Database/Users.query";
-import { signUser, newAccessToken } from "../Helpers/jwt.auth.helper";
-import { CustomStatusCodes } from "../Utilities/CustomStatusCodes";
+import { signUser, newAccessToken } from "../Helpers/jwt.auth.helper.js";
+import { findSingleUser } from "../Database/Users.query.js";
+import { CustomStatusCodes } from "../Utilities/CustomStatusCodes.js";
 
 const login=async (req,res)=>{
     const {email,password} = req.body
