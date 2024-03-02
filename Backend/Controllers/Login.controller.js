@@ -14,10 +14,10 @@ const login=async (req,res)=>{
         })
 
     }else{
-        const {accesstoken,refreshtoken}=signUser(email)
+        const {accessToken,refreshToken}=signUser(email)
         res.status(CustomStatusCodes.SUCCESS).send({
-            accessToken:accesstoken,
-            refreshToken:refreshtoken,
+            accessToken:accessToken,
+            refreshToken:refreshToken,
             code:CustomStatusCodes.SUCCESS
         })
     }
