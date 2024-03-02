@@ -1,6 +1,7 @@
 import { signUser, newAccessToken } from "../Helpers/jwt.auth.helper.js";
 import { findSingleUser } from "../Database/Users.query.js";
 import { CustomStatusCodes } from "../Utilities/CustomStatusCodes.js";
+import { blacklistToken } from "../Database/BlackListedTokens.query.js";
 
 const login=async (req,res)=>{
     const {email,password} = req.body
@@ -32,7 +33,19 @@ const refresh=async (req,res)=>{
     })
 }
 
+const logout=async (req,res)=>{
+    const token=req.token
+    const blacklisted=await blacklistToken(token)
+
+    res.status(CustomStatusCodes.SUCCESS).send({
+        token:blacklisted,
+        message:"TOKEN_DELETED",
+        code:CustomStatusCodes.SUCCESS
+    })
+}
+
 export{
     login,
-    refresh
+    refresh,
+    logout
 }
