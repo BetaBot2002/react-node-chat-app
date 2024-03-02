@@ -1,13 +1,14 @@
 import { PrismaClient } from "@prisma/client";
 const prisma=new PrismaClient()
 
-const registerUser= async (name,email,password)=>{
+const registerUser= async (name,email,password,pic)=>{
     return await prisma.users.create({
         data:{
             name:name,
             email:email,
             password:password,
-            isAdmin:false
+            isAdmin:false,
+            ...(pic && { profilePic: pic })
         }
     })
 }

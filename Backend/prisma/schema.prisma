@@ -29,11 +29,12 @@ model Chats {
 }
 
 model Users {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  email    String @unique
-  password String
-  isAdmin  Boolean
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  email      String  @unique
+  password   String
+  isAdmin    Boolean
+  profilePic String? @default("https://i0.wp.com/www.dc-hauswartungen.ch/wp-content/uploads/2018/01/dummy_profile.png")
 
   chats   Chats[]  @relation(name: "Users", fields: [chatIds], references: [id])
   chatIds String[] @db.ObjectId
