@@ -10,6 +10,15 @@ const isBlacklisted=async (token)=>{
     return !(blackListedToken===null)
 }
 
+const blacklistToken=async (token)=>{
+    return await prisma.blackListedTokens.create({
+        data:{
+            token:token
+        }
+    })
+}
+
 export {
-    isBlacklisted
+    isBlacklisted,
+    blacklistToken
 }
