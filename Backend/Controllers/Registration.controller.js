@@ -19,12 +19,11 @@ import { CustomStatusCodes } from "../Utilities/CustomStatusCodes.js";
 //     // res.status(CustomStatusCodes.SUCCESS).send(user)
 // }
 const register=async (req,res)=>{
-    const {name,email,password}=req.body
-    const pic=null
+    const {name,email,password,image}=req.body
     const encryptedPassword=await hashPassword(password)
 
     try {
-        const user=await registerUser(name,email,encryptedPassword,pic)
+        const user=await registerUser(name,email,encryptedPassword,image)
         res.status(CustomStatusCodes.SUCCESS).send(user)
     } catch (error) {
         res.status(CustomStatusCodes.USER_ALREADY_EXISTS).send({
