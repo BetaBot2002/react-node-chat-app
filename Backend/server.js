@@ -2,6 +2,7 @@ import express from "express"
 import dotenv from "dotenv"
 import cors from "cors"
 import { userRouter } from "./Routes/User.route.js"
+import { errorRoute, notFound } from "./Middlewares/ErrorHandler.middleware.js"
 
 dotenv.config()
 
@@ -14,6 +15,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 
 app.use("/user",userRouter)
+app.use(notFound)
+app.use(errorRoute)
 
 app.listen(PORT,()=>{
     console.log(`http://127.0.0.1:${PORT}`)
