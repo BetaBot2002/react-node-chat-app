@@ -22,7 +22,16 @@ const findSingleUser= async (email,password)=>{
     })
 }
 
+const findSingleUserByEmail= async (email)=>{
+    return await prisma.users.findUnique({
+        where:{
+            email:email
+        }
+    })
+}
+
 export {
     registerUser,
-    findSingleUser
+    findSingleUser,
+    findSingleUserByEmail
 }
