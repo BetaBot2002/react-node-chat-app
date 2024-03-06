@@ -1,4 +1,4 @@
-import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Text, VStack } from '@chakra-ui/react'
+import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Text, Toast, VStack, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { Colors } from '../../Utils/CSS-Variables'
 
@@ -6,12 +6,61 @@ const Signup = () => {
   const [isShown, setIsShown] = useState(false)
   const [isConfirmShown, setIsConfirmShown] = useState(false)
   const [isConfirmed, setIsConfirmed] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+  const [confirmPassword, setConfirmPassword] = useState()
+  const [imageUrl, setImageUrl] = useState()
+  const [loading, setLoading] = useState(false)
+  const toast=useToast()
 
   const picUpload = (image) => {
+    setLoading(true)
+    if(image===undefined){
+      toast({
+        title: 'Select an image',
+        description: "No image is selected.",
+        status: 'warning',
+        duration: 5000,
+        isClosable: true,
+        position:"bottom"
+      })
+      setLoading(false)
+      return
+    }
 
+    if(image.type!=='image/jpeg' && image.type!=='image/png'){
+      toast({
+        title: 'Wrong file format.',
+        description: `Only JPEG and PNG images are allowed. ${image.type}`,
+        status: 'warning',
+        duration: 5000,
+        isClosable: true,
+        position:"bottom"
+      })
+      setLoading(false)
+      return
+    }
+
+    const formData=new FormData()
+    const upload_preset=import.meta.env.VITE_APP_CLOUDINARY_UPLOAD_PRESET
+    const cloud_name=import.meta.env.VITE_APP_CLOUDINARY_CLOUD_NAME
+    const api_base_url_image=import.meta.env.VITE_APP_CLOUDINARY_API_BASE_URL_IMAGE
+    
+    formData.append("file",image)
+    formData.append("upload_preset",upload_preset)
+    formData.append("cloud_name",cloud_name)
+    fetch(api_base_url_image,{
+      method:"post",
+      body:formData
+    }).then((res)=>res.json())
+      .then((data)=>{
+        console.log(data)
+        setImageUrl(data.url.toString())
+        setLoading(false)
+      }).catch((err)=>{
+        console.log(err)
+        setLoading(false)
+      })
   }
 
   const submitHandler = () => {
@@ -105,6 +154,7 @@ const Signup = () => {
         colorScheme='purple'
         marginTop={'15px'}
         onClick={submitHandler}
+        isLoading={loading}
       >
         Sign Up
       </Button>
