@@ -1,14 +1,44 @@
 import React, { useState } from 'react'
-import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Text, VStack } from '@chakra-ui/react'
+import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, useToast, VStack } from '@chakra-ui/react'
 import { Colors } from '../../Utils/CSS-Variables'
+import axios from 'axios'
+import { Link, useNavigate } from "react-router-dom"
+import { setAccessToken, setRefreshToken } from '../../Utils/jwt.helper'
 
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isShown, setIsShown] = useState(false)
-  const submitHandler = () => {
+  const toast=useToast()
+  const navigate=useNavigate()
+  const submitHandler = async () => {
+    const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/user/login`
+    const data = {
+      email: email,
+      password: password
+    }
 
+    try {
+      const response = await axios.post(api_url, data, {
+        headers: {
+          "Content-type": "application/json",
+        }
+      })
+      setAccessToken(response.data.accessToken)
+      setRefreshToken(response.data.refreshToken)
+      
+      navigate("/")
+    } catch (error) {
+      toast({
+        title: `User not found.`,
+        description: `Wrong email or password.`,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: "bottom"
+      })
+    }
   }
 
   return (
