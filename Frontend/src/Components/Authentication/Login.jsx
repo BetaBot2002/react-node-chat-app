@@ -80,6 +80,7 @@ const Login = () => {
         colorScheme='purple'
         marginTop={'15px'}
         onClick={submitHandler}
+        isDisabled={!email || !password}
       >
         Log In
       </Button>
