@@ -1,31 +1,51 @@
 import { PrismaClient } from "@prisma/client";
-const prisma=new PrismaClient()
+const prisma = new PrismaClient()
 
-const registerUser= async (name,email,password,pic)=>{
+const registerUser = async (name, email, password, pic) => {
     return await prisma.users.create({
-        data:{
-            name:name,
-            email:email,
-            password:password,
-            isAdmin:false,
+        data: {
+            name: name,
+            email: email,
+            password: password,
+            isAdmin: false,
             ...(pic && { profilePic: pic })
         }
     })
 }
 
-const findSingleUser= async (email,password)=>{
+const findSingleUser = async (email, password) => {
     return await prisma.users.findUnique({
-        where:{
-            email:email,
-            password:password
+        where: {
+            email: email,
+            password: password
         }
     })
 }
 
-const findSingleUserByEmail= async (email)=>{
+const findSingleUserByEmail = async (email) => {
     return await prisma.users.findUnique({
-        where:{
-            email:email
+        where: {
+            email: email
+        }
+    })
+}
+
+const searchUsersByEmailOrName = async (search, current_user_mail) => {
+    return await prisma.users.findMany({
+        where: {
+            AND: [
+                {
+                    OR: [
+                        { name: { contains: search } },
+                        { email: { contains: search } }
+                    ]
+                },
+                {
+                    NOT: {
+                        email: current_user_mail
+                    }
+                }
+            ]
         }
     })
 }
@@ -33,5 +53,6 @@ const findSingleUserByEmail= async (email)=>{
 export {
     registerUser,
     findSingleUser,
-    findSingleUserByEmail
+    findSingleUserByEmail,
+    searchUsersByEmailOrName
 }
