@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 
 const LogInLock=({children,needLoggedIn})=>{
     if(needLoggedIn){
-        if(!getRefreshToken()) return <Navigate to={`registration`}/>
+        if(!getRefreshToken()) return <Navigate to={`/registration`}/>
         return <>{children}</>
     }
     if(getRefreshToken()) return <Navigate to={`/`}/>
