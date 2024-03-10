@@ -97,18 +97,18 @@ const getAllChatsByUserId = async (userId) => {
             lastMessage: {
                 include: {
                     sender: {
-                select: {
-                    id: true,
-                    email: true,
-                    name: true,
-                    profilePic: true
-                }
+                        select: {
+                            id: true,
+                            email: true,
+                            name: true,
+                            profilePic: true
+                        }
                     }
                 }
             }
         },
-        orderBy:{
-            updatedAt:'desc'
+        orderBy: {
+            updatedAt: 'desc'
         }
     })
 }
