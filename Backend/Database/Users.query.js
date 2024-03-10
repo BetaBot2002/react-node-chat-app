@@ -30,6 +30,17 @@ const findSingleUserByEmail = async (email) => {
     })
 }
 
+const findSingleUserIdByEmail = async (email) => {
+    return await prisma.users.findUnique({
+        where: {
+            email: email
+        },
+        select:{
+            id:true
+        }
+    })
+}
+
 const searchUsersByEmailOrName = async (search, current_user_mail) => {
     return await prisma.users.findMany({
         where: {
@@ -54,5 +65,6 @@ export {
     registerUser,
     findSingleUser,
     findSingleUserByEmail,
-    searchUsersByEmailOrName
+    searchUsersByEmailOrName,
+    findSingleUserIdByEmail
 }
