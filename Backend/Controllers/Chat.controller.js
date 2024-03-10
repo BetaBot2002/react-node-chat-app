@@ -1,4 +1,4 @@
-import { createChat, getAllChatsBySenderReceiver } from "../Database/Chats.query.js"
+import { createChat, getAllChatsBySenderReceiver, getAllChatsByUserId } from "../Database/Chats.query.js"
 import { findSingleUserIdByEmail } from "../Database/Users.query.js"
 
 const getOrCreateSingleChat = async (req, res) => {
@@ -21,6 +21,16 @@ const getOrCreateSingleChat = async (req, res) => {
 
 }
 
+const getAllChatsByUser=async (req,res)=>{
+    const { email } = req
+    const sender = await findSingleUserIdByEmail(email)
+
+    const chats=await getAllChatsByUserId(sender.id)
+    res.status(200).send(chats)
+
+}
+
 export {
-    getOrCreateSingleChat
+    getOrCreateSingleChat,
+    getAllChatsByUser
 }

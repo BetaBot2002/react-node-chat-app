@@ -27,9 +27,9 @@ const createChat = async (senderId, receiverId) => {
                     sender: {
                         select: {
                             id: true,
-                            name: true,
                             email: true,
-                            profilePic: true,
+                            name: true,
+                            profilePic: true
                         },
                     },
                 },
@@ -61,9 +61,9 @@ const getAllChatsBySenderReceiver = async (senderId, receiverId) => {
                     sender: {
                         select: {
                             id: true,
-                            name: true,
                             email: true,
-                            profilePic: true,
+                            name: true,
+                            profilePic: true
                         },
                     },
                 },
@@ -72,7 +72,49 @@ const getAllChatsBySenderReceiver = async (senderId, receiverId) => {
     })
 }
 
+const getAllChatsByUserId = async (userId) => {
+    return await prisma.chats.findMany({
+        where: {
+            users: { some: { id: userId } }
+        },
+        include: {
+            users: {
+                select: {
+                    id: true,
+                    email: true,
+                    name: true,
+                    profilePic: true
+                }
+            },
+            admins: {
+                select: {
+                    id: true,
+                    email: true,
+                    name: true,
+                    profilePic: true
+                }
+            },
+            lastMessage: {
+                include: {
+                    sender: {
+                select: {
+                    id: true,
+                    email: true,
+                    name: true,
+                    profilePic: true
+                }
+                    }
+                }
+            }
+        },
+        orderBy:{
+            updatedAt:'desc'
+        }
+    })
+}
+
 export {
     createChat,
-    getAllChatsBySenderReceiver
+    getAllChatsBySenderReceiver,
+    getAllChatsByUserId
 }
