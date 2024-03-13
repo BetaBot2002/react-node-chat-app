@@ -1,5 +1,13 @@
 import { PrismaClient } from "@prisma/client";
+import { generate12ByteHexString, stringsToJsonArray } from "../Helpers/UtilityFunctions.js";
 const prisma = new PrismaClient()
+
+const selectedUserFields={
+    id: true,
+    email: true,
+    name: true,
+    profilePic: true
+}
 
 const createChat = async (senderId, receiverId) => {
     return await prisma.chats.create({
@@ -11,26 +19,17 @@ const createChat = async (senderId, receiverId) => {
                     { id: receiverId }
                 ]
             },
-            isGroupChat: false
+            isGroupChat: false,
+            lastMessageId: generate12ByteHexString()
         },
         include: {
             users: {
-                select: {
-                    id: true,
-                    email: true,
-                    name: true,
-                    profilePic: true
-                }
+                select: selectedUserFields
             },
             lastMessage: {
                 include: {
                     sender: {
-                        select: {
-                            id: true,
-                            email: true,
-                            name: true,
-                            profilePic: true
-                        },
+                        select: selectedUserFields,
                     },
                 },
             },
@@ -49,22 +48,12 @@ const getAllChatsBySenderReceiver = async (senderId, receiverId) => {
         },
         include: {
             users: {
-                select: {
-                    id: true,
-                    email: true,
-                    name: true,
-                    profilePic: true
-                }
+                select: selectedUserFields
             },
             lastMessage: {
                 include: {
                     sender: {
-                        select: {
-                            id: true,
-                            email: true,
-                            name: true,
-                            profilePic: true
-                        },
+                        select: selectedUserFields,
                     },
                 },
             },
@@ -79,30 +68,15 @@ const getAllChatsByUserId = async (userId) => {
         },
         include: {
             users: {
-                select: {
-                    id: true,
-                    email: true,
-                    name: true,
-                    profilePic: true
-                }
+                select: selectedUserFields
             },
             admins: {
-                select: {
-                    id: true,
-                    email: true,
-                    name: true,
-                    profilePic: true
-                }
+                select: selectedUserFields
             },
             lastMessage: {
                 include: {
                     sender: {
-                        select: {
-                            id: true,
-                            email: true,
-                            name: true,
-                            profilePic: true
-                        }
+                        select: selectedUserFields
                     }
                 }
             }
@@ -113,8 +87,33 @@ const getAllChatsByUserId = async (userId) => {
     })
 }
 
+const createGroupChat=async (name,users,admin)=>{
+    return await prisma.chats.create({
+        data:{
+            chatName:name,
+            isGroupChat:true,
+            users:{
+                connect:stringsToJsonArray(users,"id")
+            },
+            admins:{
+                connect:[{id:admin}]
+            },
+            lastMessageId:generate12ByteHexString()
+        },
+        include:{
+            users:{
+                select:selectedUserFields
+            },
+            admins:{
+                select:selectedUserFields
+            }
+        }
+    })
+}
+
 export {
     createChat,
     getAllChatsBySenderReceiver,
-    getAllChatsByUserId
+    getAllChatsByUserId,
+    createGroupChat
 }
