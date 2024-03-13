@@ -44,7 +44,7 @@ const newGroupChat = async (req, res) => {
     let createdGroupChat = await createGroupChat(name, userIds, currentUser.id)
     console.log(createdGroupChat)
 
-    res.status(200).send(createChat)
+    res.status(200).send(createdGroupChat)
 
 }
 

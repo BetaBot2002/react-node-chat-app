@@ -19,20 +19,19 @@ const createChat = async (senderId, receiverId) => {
                     { id: receiverId }
                 ]
             },
-            isGroupChat: false,
-            lastMessageId: generate12ByteHexString()
+            isGroupChat: false
         },
         include: {
             users: {
                 select: selectedUserFields
             },
-            lastMessage: {
-                include: {
-                    sender: {
-                        select: selectedUserFields,
-                    },
-                },
-            },
+            messages:{
+                include:{
+                    sender:{
+                        select:selectedUserFields
+                    }
+                }
+            }
         }
     })
 }
@@ -50,13 +49,13 @@ const getAllChatsBySenderReceiver = async (senderId, receiverId) => {
             users: {
                 select: selectedUserFields
             },
-            lastMessage: {
-                include: {
-                    sender: {
-                        select: selectedUserFields,
-                    },
-                },
-            },
+            messages:{
+                include:{
+                    sender:{
+                        select:selectedUserFields
+                    }
+                }
+            }
         }
     })
 }
@@ -73,10 +72,10 @@ const getAllChatsByUserId = async (userId) => {
             admins: {
                 select: selectedUserFields
             },
-            lastMessage: {
-                include: {
-                    sender: {
-                        select: selectedUserFields
+            messages:{
+                include:{
+                    sender:{
+                        select:selectedUserFields
                     }
                 }
             }
@@ -97,8 +96,7 @@ const createGroupChat=async (name,users,admin)=>{
             },
             admins:{
                 connect:[{id:admin}]
-            },
-            lastMessageId:generate12ByteHexString()
+            }
         },
         include:{
             users:{
