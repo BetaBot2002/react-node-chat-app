@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { generate12ByteHexString, stringsToJsonArray } from "../Helpers/UtilityFunctions.js";
 const prisma = new PrismaClient()
 
-const selectedUserFields={
+const selectedUserFields = {
     id: true,
     email: true,
     name: true,
@@ -25,10 +25,10 @@ const createChat = async (senderId, receiverId) => {
             users: {
                 select: selectedUserFields
             },
-            messages:{
-                include:{
-                    sender:{
-                        select:selectedUserFields
+            messages: {
+                include: {
+                    sender: {
+                        select: selectedUserFields
                     }
                 }
             }
@@ -49,10 +49,10 @@ const getAllChatsBySenderReceiver = async (senderId, receiverId) => {
             users: {
                 select: selectedUserFields
             },
-            messages:{
-                include:{
-                    sender:{
-                        select:selectedUserFields
+            messages: {
+                include: {
+                    sender: {
+                        select: selectedUserFields
                     }
                 }
             }
@@ -72,10 +72,10 @@ const getAllChatsByUserId = async (userId) => {
             admins: {
                 select: selectedUserFields
             },
-            messages:{
-                include:{
-                    sender:{
-                        select:selectedUserFields
+            messages: {
+                include: {
+                    sender: {
+                        select: selectedUserFields
                     }
                 }
             }
@@ -86,24 +86,44 @@ const getAllChatsByUserId = async (userId) => {
     })
 }
 
-const createGroupChat=async (name,users,admin)=>{
+const createGroupChat = async (name, users, admin) => {
     return await prisma.chats.create({
-        data:{
-            chatName:name,
-            isGroupChat:true,
-            users:{
-                connect:stringsToJsonArray(users,"id")
+        data: {
+            chatName: name,
+            isGroupChat: true,
+            users: {
+                connect: stringsToJsonArray(users, "id")
             },
-            admins:{
-                connect:[{id:admin}]
+            admins: {
+                connect: [{ id: admin }]
             }
         },
-        include:{
-            users:{
-                select:selectedUserFields
+        include: {
+            users: {
+                select: selectedUserFields
             },
-            admins:{
-                select:selectedUserFields
+            admins: {
+                select: selectedUserFields
+            }
+        }
+    })
+}
+
+const updateChatName = async (chatId, newName, adminId) => {
+    return await prisma.chats.update({
+        where: {
+            id: chatId,
+            admins: { some: { id: adminId } }
+        },
+        data: {
+            chatName: newName
+        },
+        include: {
+            users: {
+                select: selectedUserFields
+            },
+            admins: {
+                select: selectedUserFields
             }
         }
     })
@@ -113,5 +133,6 @@ export {
     createChat,
     getAllChatsBySenderReceiver,
     getAllChatsByUserId,
-    createGroupChat
+    createGroupChat,
+    updateChatName
 }

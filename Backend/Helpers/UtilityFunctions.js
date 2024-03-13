@@ -10,10 +10,6 @@ function generate12ByteHexString() {
     return '777' + hexString.substring(3);
 }
 
-// Example usage:
-const hexString = generate12ByteHexString();
-console.log(hexString);
-
 
 export{
     stringsToJsonArray,
