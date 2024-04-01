@@ -151,11 +151,34 @@ const addUserToGroup = async (chatId, userId, adminId) => {
     })
 }
 
+const removeUserFromGroup = async (chatId, userId, adminId) => {
+    return await prisma.chats.update({
+        where: {
+            id: chatId,
+            admins: { some: { id: adminId } }
+        },
+        data: {
+            users: {
+                disconnect: { id: userId }
+            }
+        },
+        include: {
+            users: {
+                select: selectedUserFields
+            },
+            admins: {
+                select: selectedUserFields
+            }
+        }
+    })
+}
+
 export {
     createChat,
     getAllChatsBySenderReceiver,
     getAllChatsByUserId,
     createGroupChat,
     updateChatName,
-    addUserToGroup
+    addUserToGroup,
+    removeUserFromGroup
 }

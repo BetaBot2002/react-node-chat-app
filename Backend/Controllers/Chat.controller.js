@@ -1,4 +1,4 @@
-import { addUserToGroup, createChat, createGroupChat, getAllChatsBySenderReceiver, getAllChatsByUserId, updateChatName } from "../Database/Chats.query.js"
+import { addUserToGroup, createChat, createGroupChat, getAllChatsBySenderReceiver, getAllChatsByUserId, removeUserFromGroup, updateChatName } from "../Database/Chats.query.js"
 import { findSingleUserIdByEmail } from "../Database/Users.query.js"
 import { CustomStatusCodes } from "../Utilities/CustomStatusCodes.js"
 
@@ -85,10 +85,29 @@ const addToGroup = async (req, res) => {
 
 }
 
+const removeFromGroup = async (req, res) => {
+    const { chatid, userid } = req.body
+    const { email } = req
+    const currentUser = await findSingleUserIdByEmail(email)
+
+    try {
+        const updatedChatWithRemovedUser = await removeUserFromGroup(chatid, userid,currentUser.id)
+        console.log(updatedChatWithRemovedUser)
+        res.status(200).send(updatedChatWithRemovedUser)
+    } catch (error) {
+        res.status(404).send({
+            message: "USER_NOT_ADMIN",
+            code: CustomStatusCodes.USER_NOT_FOUND
+        })
+    }
+
+}
+
 export {
     getOrCreateSingleChat,
     getAllChatsByUser,
     newGroupChat,
     renameGroupChat,
-    addToGroup
+    addToGroup,
+    removeFromGroup
 }
