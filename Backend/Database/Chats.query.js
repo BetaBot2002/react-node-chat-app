@@ -129,10 +129,33 @@ const updateChatName = async (chatId, newName, adminId) => {
     })
 }
 
+const addUserToGroup = async (chatId, userId, adminId) => {
+    return await prisma.chats.update({
+        where: {
+            id: chatId,
+            admins: { some: { id: adminId } }
+        },
+        data: {
+            users: {
+                connect: { id: userId }
+            }
+        },
+        include: {
+            users: {
+                select: selectedUserFields
+            },
+            admins: {
+                select: selectedUserFields
+            }
+        }
+    })
+}
+
 export {
     createChat,
     getAllChatsBySenderReceiver,
     getAllChatsByUserId,
     createGroupChat,
-    updateChatName
+    updateChatName,
+    addUserToGroup
 }
