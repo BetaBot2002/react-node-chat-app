@@ -24,7 +24,7 @@ const SideDrawer = () => {
         <Tooltip hasArrow label='Search Users' placement='bottom-end'>
           <Button variant={"ghost"}>
             <i class="fa-solid fa-magnifying-glass" style={{ color: Colors.theme_blue_gray }}></i>
-            <Text d={{base:"none", md:"flex"}} px={4}>Search Users</Text>
+            <Text d={{base:"none", md:"flex"}} px={4}>Search Users to Chat</Text>
           </Button>
         </Tooltip>
       </Box>
