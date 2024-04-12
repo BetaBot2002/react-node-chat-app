@@ -30,9 +30,9 @@ const ChatProvider = ({ children }) => {
         .then(result => {
             console.log(result);
         })
-    }, [localStorage.getItem('refresh')])
+    }, [])
 
-    return <ChatContext.Provider value={{ user, setUser }}>{children}</ChatContext.Provider>
+    return <ChatContext.Provider value={{ user, setUser,getUser }}>{children}</ChatContext.Provider>
 }
 
 export const ChatState = () => {

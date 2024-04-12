@@ -4,12 +4,14 @@ import { Colors } from '../../Utils/CSS-Variables'
 import axios from 'axios'
 import { Link, useNavigate } from "react-router-dom"
 import { setAccessToken, setRefreshToken } from '../../Utils/jwt.helper'
+import { ChatState } from '../../Context/ChatProvider'
 
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isShown, setIsShown] = useState(false)
+  const {getUser}=ChatState()
   const toast=useToast()
   const navigate=useNavigate()
   const submitHandler = async () => {
@@ -27,6 +29,7 @@ const Login = () => {
       })
       setAccessToken(response.data.accessToken)
       setRefreshToken(response.data.refreshToken)
+      getUser()
       
       navigate("/")
     } catch (error) {
