@@ -1,4 +1,4 @@
-import { searchUsersByEmailOrName } from "../Database/Users.query.js"
+import { findSingleUserByEmail, searchUsersByEmailOrName } from "../Database/Users.query.js"
 
 const searchUsers=async (req,res)=>{
     const {search}=req.query
@@ -9,6 +9,13 @@ const searchUsers=async (req,res)=>{
 
 }
 
+const getCurrentLoggedUserDetails=async (req,res)=>{
+    const {email}=req
+    const user= await findSingleUserByEmail(email)
+    res.status(200).send(user)
+}
+
 export{
-    searchUsers
+    searchUsers,
+    getCurrentLoggedUserDetails
 }
