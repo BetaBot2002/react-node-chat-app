@@ -14,6 +14,7 @@ import {
   MenuDivider,
 } from '@chakra-ui/react'
 import { ChatState } from '../../Context/ChatProvider'
+import ProfileModal from './ProfileModal'
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("")
@@ -21,7 +22,7 @@ const SideDrawer = () => {
   const [loading, setLoading] = useState(false)
   const [loadingChat, setLoadingChat] = useState()
 
-  const {user}=ChatState()
+  const { user } = ChatState()
   return (
     <>
       <Box
@@ -58,12 +59,14 @@ const SideDrawer = () => {
             </MenuButton>
           </Menu>
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon/>} background={'transparent'} _hover={{background:'transparent'}}>
+            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} background={'transparent'} _hover={{ background: 'transparent' }}>
               <Avatar size={'sm'} cursor={'pointer'} name={user.name} src={user.profilePic} />
             </MenuButton>
             <MenuList backgroundColor={Colors.theme_dark} borderColor={Colors.theme_lavender}>
-              <MenuItem backgroundColor={Colors.theme_dark}>My Profile</MenuItem>
-              <MenuDivider/>
+              <ProfileModal user={user}>
+                <MenuItem backgroundColor={Colors.theme_dark}>My Profile</MenuItem>
+              </ProfileModal>
+              <MenuDivider />
               <MenuItem backgroundColor={Colors.theme_dark}>Log Out</MenuItem>
             </MenuList>
           </Menu>
