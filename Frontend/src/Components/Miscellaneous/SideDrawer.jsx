@@ -58,9 +58,14 @@ const SideDrawer = () => {
             </MenuButton>
           </Menu>
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+            <MenuButton as={Button} rightIcon={<ChevronDownIcon/>} background={'transparent'} _hover={{background:'transparent'}}>
               <Avatar size={'sm'} cursor={'pointer'} name={user.name} src={user.profilePic} />
             </MenuButton>
+            <MenuList backgroundColor={Colors.theme_dark} borderColor={Colors.theme_lavender}>
+              <MenuItem backgroundColor={Colors.theme_dark}>My Profile</MenuItem>
+              <MenuDivider/>
+              <MenuItem backgroundColor={Colors.theme_dark}>Log Out</MenuItem>
+            </MenuList>
           </Menu>
         </div>
       </Box>
