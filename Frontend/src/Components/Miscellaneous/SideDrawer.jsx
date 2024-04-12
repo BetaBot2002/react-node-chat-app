@@ -13,12 +13,15 @@ import {
   MenuOptionGroup,
   MenuDivider,
 } from '@chakra-ui/react'
+import { ChatState } from '../../Context/ChatProvider'
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("")
   const [searchResults, setSearchResults] = useState([])
   const [loading, setLoading] = useState(false)
   const [loadingChat, setLoadingChat] = useState()
+
+  const {user}=ChatState()
   return (
     <>
       <Box
@@ -34,7 +37,7 @@ const SideDrawer = () => {
       >
         <Tooltip hasArrow label='Search Users to Chat' placement='bottom-end'>
           <Button variant={"ghost"}>
-            <i class="fa-solid fa-magnifying-glass" style={{ color: Colors.theme_blue_gray }}></i>
+            <i className="fa-solid fa-magnifying-glass" style={{ color: Colors.theme_blue_gray }}></i>
             <Text d={{ base: "none", md: "flex" }} px={4}>Search Users</Text>
           </Button>
         </Tooltip>
@@ -56,7 +59,7 @@ const SideDrawer = () => {
           </Menu>
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-              <Avatar size={'sm'} cursor={'pointer'} name='Sinchan' src='pic' />
+              <Avatar size={'sm'} cursor={'pointer'} name={user.name} src={user.profilePic} />
             </MenuButton>
           </Menu>
         </div>

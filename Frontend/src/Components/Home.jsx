@@ -3,8 +3,10 @@ import { Box } from '@chakra-ui/layout'
 import SideDrawer from './Miscellaneous/SideDrawer'
 import MyChats from './MyChats'
 import ChatBox from './ChatBox'
+import { ChatState } from '../Context/ChatProvider'
 
 const Home = () => {
+  const {user}=ChatState()
   return (
     <>
       <SideDrawer/>
