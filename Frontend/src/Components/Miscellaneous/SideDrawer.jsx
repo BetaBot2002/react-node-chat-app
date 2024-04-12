@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box } from '@chakra-ui/layout'
-import { Tooltip, Button, Text, Avatar, AvatarBadge, AvatarGroup } from '@chakra-ui/react'
+import { Tooltip, Button, Text, Avatar, useToast } from '@chakra-ui/react'
 import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { Colors } from '../../Utils/CSS-Variables'
 import {
@@ -16,13 +16,47 @@ import {
 import { ChatState } from '../../Context/ChatProvider'
 import ProfileModal from './ProfileModal'
 
+import { useNavigate } from "react-router-dom"
+import axios from 'axios'
+import { getRefreshToken, setAccessToken, setRefreshToken } from '../../Utils/jwt.helper'
+
+
 const SideDrawer = () => {
   const [search, setSearch] = useState("")
   const [searchResults, setSearchResults] = useState([])
   const [loading, setLoading] = useState(false)
   const [loadingChat, setLoadingChat] = useState()
+  const navigate = useNavigate()
+  const toast = useToast()
 
-  const { user } = ChatState()
+  const { user, setUser } = ChatState()
+  const handleLogout = async () => {
+    const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/user/logout`
+    try {
+      const response = await axios.post(api_url, {}, {
+        headers: {
+          "Content-type": "application/json",
+          'Authorization': `bearer ${getRefreshToken()}`
+        }
+      })
+      setAccessToken('')
+      setRefreshToken('')
+      setUser({})
+
+      navigate("/registration")
+    } catch (error) {
+      console.log(error)
+      toast({
+        title: `User not found.`,
+        description: `Wrong email or password.`,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: "bottom"
+      })
+    }
+  }
+
   return (
     <>
       <Box
@@ -67,7 +101,7 @@ const SideDrawer = () => {
                 <MenuItem backgroundColor={Colors.theme_dark}>My Profile</MenuItem>
               </ProfileModal>
               <MenuDivider />
-              <MenuItem backgroundColor={Colors.theme_dark}>Log Out</MenuItem>
+              <MenuItem backgroundColor={Colors.theme_dark} onClick={handleLogout}>Log Out</MenuItem>
             </MenuList>
           </Menu>
         </div>
