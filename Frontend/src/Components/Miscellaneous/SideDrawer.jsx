@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box } from '@chakra-ui/layout'
-import { Tooltip, Button, Text, Avatar, useToast } from '@chakra-ui/react'
+import { Tooltip, Button, Text, Avatar, useToast, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, Input } from '@chakra-ui/react'
 import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { Colors } from '../../Utils/CSS-Variables'
 import {
@@ -18,7 +18,9 @@ import ProfileModal from './ProfileModal'
 
 import { useNavigate } from "react-router-dom"
 import axios from 'axios'
-import { getRefreshToken, setAccessToken, setRefreshToken } from '../../Utils/jwt.helper'
+import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken } from '../../Utils/jwt.helper'
+import ChatLoading from '../ChatLoading'
+import UserListItem from '../UserComponents/UserListItem'
 
 
 const SideDrawer = () => {
@@ -28,6 +30,7 @@ const SideDrawer = () => {
   const [loadingChat, setLoadingChat] = useState()
   const navigate = useNavigate()
   const toast = useToast()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { user, setUser } = ChatState()
   const handleLogout = async () => {
@@ -47,14 +50,56 @@ const SideDrawer = () => {
     } catch (error) {
       console.log(error)
       toast({
-        title: `User not found.`,
-        description: `Wrong email or password.`,
+        title: `Something Went Wrong`,
+        description: `Logout failed`,
         status: 'error',
         duration: 5000,
         isClosable: true,
         position: "bottom"
       })
     }
+  }
+
+  const handleSearch = async () => {
+    if (!search) {
+      toast({
+        title: "Please Enter something in search",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top-left",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true)
+      const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/user?search=${search}`
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          'Authorization': `bearer ${await getAccessToken()}`
+        }
+      }
+      const { data } = await axios.get(api_url, config)
+      console.log(data)
+      setLoading(false)
+      setSearchResults(data)
+
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: "Failed to Load the Search Results",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  }
+
+  const accessChat=(userId)=>{
+    console.log("ac"+userId)
   }
 
   return (
@@ -71,7 +116,7 @@ const SideDrawer = () => {
         borderRadius={"6px"}
       >
         <Tooltip hasArrow label='Search Users to Chat' placement='bottom-end'>
-          <Button variant={"ghost"}>
+          <Button variant={"ghost"} onClick={onOpen}>
             <i className="fa-solid fa-magnifying-glass" style={{ color: Colors.theme_blue_gray }}></i>
             <Text d={{ base: "none", md: "flex" }} px={4}>Search Users</Text>
           </Button>
@@ -106,6 +151,40 @@ const SideDrawer = () => {
           </Menu>
         </div>
       </Box>
+      <Drawer
+        placement='left'
+        onClose={onClose}
+        isOpen={isOpen}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerHeader borderBottomWidth={'1px'}>Search Users</DrawerHeader>
+          <DrawerBody>
+            <Box display="flex" flexDir={'row'} pb={2}>
+              <Input
+                placeholder="Search by name or email"
+                mr={2}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Button onClick={handleSearch}>Go</Button>
+            </Box>
+            {loading ? (
+              <ChatLoading/>
+            ) : (
+              searchResults.map((user)=>(
+                <UserListItem
+                  key={user.id}
+                  user={user}
+                  handleClick={()=>{ accessChat(user.id)}}
+                />
+              ))
+            )
+            }
+          </DrawerBody>
+        </DrawerContent>
+
+      </Drawer>
     </>
   )
 }
