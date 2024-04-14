@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box } from '@chakra-ui/layout'
-import { Tooltip, Button, Text, Avatar, useToast, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, Input } from '@chakra-ui/react'
+import { Tooltip, Button, Text, Avatar, useToast, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, Input, Spinner } from '@chakra-ui/react'
 import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { Colors } from '../../Utils/CSS-Variables'
 import {
@@ -32,7 +32,7 @@ const SideDrawer = () => {
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const { user, setUser } = ChatState()
+  const { user, setUser,setSelectedChat,chats, setChats } = ChatState()
   const handleLogout = async () => {
     const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/user/logout`
     try {
@@ -98,8 +98,34 @@ const SideDrawer = () => {
     }
   }
 
-  const accessChat=(userId)=>{
-    console.log("ac"+userId)
+  const accessChat=async (receiverEmail) => {
+    console.log(receiverEmail);
+
+    try {
+      setLoadingChat(true);
+      const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/chat`
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          'Authorization': `bearer ${await getAccessToken()}`
+        }
+      }
+      const { data } = await axios.post(api_url, { receiverEmail }, config);
+
+      if (!chats.find((c) => c.id === data.id)) setChats([data, ...chats]);
+      setSelectedChat(data);
+      setLoadingChat(false);
+      onClose();
+    } catch (error) {
+      toast({
+        title: "Error fetching the chat",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      })
+    }
   }
 
   return (
@@ -176,11 +202,13 @@ const SideDrawer = () => {
                 <UserListItem
                   key={user.id}
                   user={user}
-                  handleClick={()=>{ accessChat(user.id)}}
+                  handleClick={()=>{ accessChat(user.email)}}
                 />
               ))
             )
             }
+
+            {loadingChat && <Spinner ml={'auto'} display={'flex'}/>}
           </DrawerBody>
         </DrawerContent>
 

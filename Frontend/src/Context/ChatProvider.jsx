@@ -5,6 +5,9 @@ const ChatContext = createContext()
 
 const ChatProvider = ({ children }) => {
     const [user, setUser] = useState({})
+    const [selectedChat, setSelectedChat] = useState()
+    const [chats, setChats] = useState([])
+
 
     const getUser = async () => {
         const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/user/getlogged`
@@ -27,12 +30,12 @@ const ChatProvider = ({ children }) => {
 
     useEffect(() => {
         getUser()
-        .then(result => {
-            console.log(result);
-        })
+            .then(result => {
+                console.log(result);
+            })
     }, [])
 
-    return <ChatContext.Provider value={{ user, setUser,getUser }}>{children}</ChatContext.Provider>
+    return <ChatContext.Provider value={{ user, setUser, getUser,selectedChat, setSelectedChat,chats, setChats }}>{children}</ChatContext.Provider>
 }
 
 export const ChatState = () => {
