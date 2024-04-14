@@ -51,10 +51,10 @@ const login = async (req, res) => {
 
 const refresh = async (req, res) => {
     const { email } = req
-    const newaccesstoken = newAccessToken(email)
+    const {accessToken} = newAccessToken(email)
 
     res.status(CustomStatusCodes.SUCCESS).send({
-        accessToken: newaccesstoken,
+        accessToken: accessToken,
         code: CustomStatusCodes.SUCCESS
     })
 }
