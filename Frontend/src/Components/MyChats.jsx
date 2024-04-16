@@ -8,6 +8,7 @@ import { Colors } from '../Utils/CSS-Variables'
 import { AddIcon } from '@chakra-ui/icons'
 import ChatLoading from './ChatLoading'
 import { getSender } from '../Utils/chat.helper'
+import GroupChatModal from './Miscellaneous/GroupChatModal'
 
 const MyChats = () => {
   const [loggedUser, setLoggedUser] = useState()
@@ -68,13 +69,15 @@ const MyChats = () => {
         color={Colors.theme_light}
       >
         My Chats
-        <Button
-          display="flex"
-          fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-          rightIcon={<AddIcon />}
-        >
-          New Group Chat
-        </Button>
+        <GroupChatModal>
+          <Button
+            display="flex"
+            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
+            rightIcon={<AddIcon />}
+          >
+            New Group Chat
+          </Button>
+        </GroupChatModal>
       </Box>
       <Box
         display="flex"
@@ -104,10 +107,10 @@ const MyChats = () => {
                     <Text>
                       {
                         !chat.isGroupChat
-                        ?(
-                          getSender(loggedUser,chat.users)
-                        )
-                        :chat.chatName
+                          ? (
+                            getSender(loggedUser, chat.users)
+                          )
+                          : chat.chatName
                       }
                     </Text>
 
