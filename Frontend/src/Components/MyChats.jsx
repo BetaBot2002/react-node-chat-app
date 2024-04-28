@@ -10,14 +10,14 @@ import ChatLoading from './ChatLoading'
 import { getSender } from '../Utils/chat.helper'
 import GroupChatModal from './Miscellaneous/GroupChatModal'
 
-const MyChats = () => {
+const MyChats = ({fetchAgain}) => {
   const [loggedUser, setLoggedUser] = useState()
   const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState()
 
   const toast = useToast()
 
   const fetchChats = async () => {
-    // console.log(user._id);
+    // console.log(user.id);
     try {
       const config = {
         headers: {
@@ -43,7 +43,7 @@ const MyChats = () => {
   useEffect(() => {
     setLoggedUser(user)
     fetchChats()
-  }, []);
+  }, [fetchAgain]);
 
   return (
     <Box

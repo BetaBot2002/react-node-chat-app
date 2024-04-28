@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState } from 'react'
 import { Box } from '@chakra-ui/layout'
 import SideDrawer from './Miscellaneous/SideDrawer'
 import MyChats from './MyChats'
@@ -7,6 +8,7 @@ import { ChatState } from '../Context/ChatProvider'
 
 const Home = () => {
   const {user}=ChatState()
+  const [fetchAgain, setFetchAgain] = useState(false);
   return (
     <>
       <SideDrawer/>
@@ -17,8 +19,8 @@ const Home = () => {
         h={'91.5vh'}
         padding={'10px'}
       >
-          <MyChats/>
-          <ChatBox/>
+          <MyChats fetchAgain={fetchAgain} />
+          <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain}/>
       </Box>
     </>
   )
