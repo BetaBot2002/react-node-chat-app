@@ -140,12 +140,14 @@ const GroupChatModal = ({ children }) => {
                             <Input
                                 placeholder='Enter Chat Name'
                                 onChange={(e) => { setGroupChatName(e.target.value) }}
+                                value={groupChatName}
                             />
                         </FormControl>
                         <FormControl >
                             <Input
                                 placeholder='Add users'
                                 onChange={(e) => { handleSearch(e.target.value) }}
+                                value={search}
                             />
                         </FormControl>
                         <Box w="100%" display="flex" flexWrap="wrap">
