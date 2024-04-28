@@ -11,7 +11,6 @@ import { getSender } from '../Utils/chat.helper'
 import GroupChatModal from './Miscellaneous/GroupChatModal'
 
 const MyChats = ({fetchAgain}) => {
-  const [loggedUser, setLoggedUser] = useState()
   const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState()
 
   const toast = useToast()
@@ -41,7 +40,6 @@ const MyChats = ({fetchAgain}) => {
   };
 
   useEffect(() => {
-    setLoggedUser(user)
     fetchChats()
   }, [fetchAgain]);
 
@@ -108,7 +106,7 @@ const MyChats = ({fetchAgain}) => {
                       {
                         !chat.isGroupChat
                           ? (
-                            getSender(loggedUser, chat.users)
+                            getSender(user, chat.users).name
                           )
                           : chat.chatName
                       }
