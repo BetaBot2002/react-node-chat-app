@@ -45,6 +45,8 @@ const SideDrawer = () => {
       setAccessToken('')
       setRefreshToken('')
       setUser({})
+      setSelectedChat("")
+      setChats([])
 
       navigate("/registration")
     } catch (error) {
