@@ -4,6 +4,8 @@ import { Box, IconButton, Text } from '@chakra-ui/react'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { getSender } from '../Utils/chat.helper'
 import ProfileModal from './Miscellaneous/ProfileModal'
+import { Colors } from '../Utils/CSS-Variables'
+import UpdateGroupChatModal from './Miscellaneous/UpdateGroupChatModal'
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const { user, selectedChat, setSelectedChat } = ChatState()
@@ -31,12 +33,30 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         {!selectedChat.isGroupChat ?
                             (<>
                                 {getSender(user, selectedChat.users).name}
-                                <ProfileModal user={getSender(user, selectedChat.users)}/>
+                                <ProfileModal user={getSender(user, selectedChat.users)} />
                             </>) :
-                            (<>{selectedChat.chatName.toUpperCase()}</>)
+                            (<>{selectedChat.chatName.toUpperCase()}
+                                <UpdateGroupChatModal
+                                    fetchAgain={fetchAgain}
+                                    setFetchAgain={setFetchAgain}
+                                />
+                            </>)
                         }
-
                     </Text>
+                    <Box
+                        display="flex"
+                        flexDir="column"
+                        justifyContent="flex-end"
+                        p={3}
+                        bg={Colors.theme_lavender}
+                        color={Colors.theme_dark}
+                        w="100%"
+                        h="100%"
+                        borderRadius="lg"
+                        overflowY="hidden"
+                    >
+                        Chats
+                    </Box>
                 </>) :
                 (<Box display="flex" alignItems="center" justifyContent="center" h="100%">
                     <Text fontSize="3xl" pb={3} fontFamily="Helvetica" fontWeight={"bold"}>
