@@ -1,5 +1,5 @@
 import { ViewIcon } from '@chakra-ui/icons'
-import { Box, Button, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from '@chakra-ui/react'
+import { Box, Button, FormControl, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from '@chakra-ui/react'
 import React from 'react'
 import { useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
@@ -16,7 +16,13 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     const [renameLoading, setRenameLoading] = useState(false);
     const toast = useToast()
 
-    const handleRemove=(user)=>{
+    const handleRemove = (user) => {
+
+    }
+    const handleRename = () => {
+
+    }
+    const handleSearch = (value) => {
 
     }
 
@@ -37,7 +43,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
                     <ModalCloseButton />
                     <ModalBody>
                         <Box>
-
                             {selectedChat.users.map((selectedUser) => (
                                 <UserBadgeItem
                                     key={selectedUser.id}
@@ -47,11 +52,35 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
                                 />
                             ))}
                         </Box>
+                        <FormControl display="flex">
+                            <Input
+                                placeholder="Chat Name"
+                                mb={3}
+                                value={groupChatName}
+                                onChange={(e) => setGroupChatName(e.target.value)}
+                            />
+                            <Button
+                                variant="solid"
+                                colorScheme="teal"
+                                ml={1}
+                                isLoading={renameLoading}
+                                onClick={handleRename}
+                            >
+                                Update
+                            </Button>
+                        </FormControl>
+                        <FormControl>
+                            <Input
+                                placeholder="Add User to group"
+                                mb={1}
+                                onChange={(e) => handleSearch(e.target.value)}
+                            />
+                        </FormControl>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={onClose}>
-                            Close
+                        <Button onClick={() => handleRemove(user)} colorScheme="red">
+                            Leave Group
                         </Button>
                     </ModalFooter>
                 </ModalContent>
