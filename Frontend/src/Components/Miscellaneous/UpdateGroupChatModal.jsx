@@ -19,10 +19,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     const [renameLoading, setRenameLoading] = useState(false);
     const toast = useToast()
 
-    const handleRemove = (user) => {
-
-    }
-
     const handleAddUser = async (userToBeAdded) => {
         if (selectedChat.userIds.includes(userToBeAdded.id)) {
             toast({
@@ -76,6 +72,50 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
             setLoading(false)
         }
     }
+
+    const handleRemove = async (userToBeRemoved) => {
+        if (!selectedChat.adminIds.includes(user.id) && userToBeRemoved.id!==user.id) {
+            toast({
+                title: "Only admins can add someone!",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            return;
+        }
+
+        try {
+            setLoading(true)
+            const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/chat/removefromgroup`
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': `bearer ${await getAccessToken()}`
+                }
+            }
+            const body = {
+                chatid: selectedChat.id,
+                userid: userToBeRemoved.id
+            }
+            const { data } = await axios.put(api_url, body, config)
+            console.log(data)
+            userToBeRemoved.id===user.id? setSelectedChat():setSelectedChat(data)
+            setFetchAgain(!fetchAgain)
+            setLoading(false)
+        } catch (error) {
+            toast({
+                title: "Error Occured!",
+                description: "Failed to remove user from the group",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom-left",
+            });
+            setLoading(false)
+        }
+    }
+
     const handleRename = async () => {
         if (!groupChatName) return
         try {
