@@ -4,6 +4,8 @@ import React from 'react'
 import { useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
 import UserBadgeItem from '../UserComponents/UserBadgeItem'
+import axios from 'axios'
+import { getAccessToken } from '../../Utils/jwt.helper'
 
 const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -19,8 +21,38 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     const handleRemove = (user) => {
 
     }
-    const handleRename = () => {
-
+    const handleRename = async () => {
+        if (!groupChatName) return
+        try {
+            setRenameLoading(true)
+            const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/chat/rename`
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': `bearer ${await getAccessToken()}`
+                }
+            }
+            const body={
+                chatid:selectedChat.id,
+                newname:groupChatName
+            }
+            const { data } = await axios.put(api_url, body, config)
+            console.log(data)
+            setSelectedChat(data)
+            setFetchAgain(!fetchAgain)
+            setRenameLoading(false)
+        } catch (error) {
+            toast({
+                title: "Error Occured!",
+                description: "Failed to rename the group",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom-left",
+            });
+            setRenameLoading(false)
+        }
+        setGroupChatName("")
     }
     const handleSearch = (value) => {
 
@@ -66,7 +98,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
                                 isLoading={renameLoading}
                                 onClick={handleRename}
                             >
-                                Update
+                                Rename
                             </Button>
                         </FormControl>
                         <FormControl>
