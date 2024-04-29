@@ -1,11 +1,12 @@
 import { ViewIcon } from '@chakra-ui/icons'
-import { Box, Button, FormControl, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from '@chakra-ui/react'
+import { Box, Button, FormControl, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure, useToast } from '@chakra-ui/react'
 import React from 'react'
 import { useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
 import UserBadgeItem from '../UserComponents/UserBadgeItem'
 import axios from 'axios'
 import { getAccessToken } from '../../Utils/jwt.helper'
+import UserListItem from '../UserComponents/UserListItem'
 
 const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -21,6 +22,60 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     const handleRemove = (user) => {
 
     }
+
+    const handleAddUser = async (userToBeAdded) => {
+        if (selectedChat.userIds.includes(userToBeAdded.id)) {
+            toast({
+                title: "User Already in group!",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            return;
+        }
+
+        if (!selectedChat.adminIds.includes(user.id)) {
+            toast({
+                title: "Only admins can add someone!",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            return;
+        }
+
+        try {
+            setLoading(true)
+            const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/chat/addtogroup`
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': `bearer ${await getAccessToken()}`
+                }
+            }
+            const body = {
+                chatid: selectedChat.id,
+                userid: userToBeAdded.id
+            }
+            const { data } = await axios.put(api_url, body, config)
+            console.log(data)
+            setSelectedChat(data)
+            setFetchAgain(!fetchAgain)
+            setLoading(false)
+        } catch (error) {
+            toast({
+                title: "Error Occured!",
+                description: "Failed to add user to the group",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom-left",
+            });
+            setLoading(false)
+        }
+    }
     const handleRename = async () => {
         if (!groupChatName) return
         try {
@@ -32,9 +87,9 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
                     'Authorization': `bearer ${await getAccessToken()}`
                 }
             }
-            const body={
-                chatid:selectedChat.id,
-                newname:groupChatName
+            const body = {
+                chatid: selectedChat.id,
+                newname: groupChatName
             }
             const { data } = await axios.put(api_url, body, config)
             console.log(data)
@@ -54,8 +109,33 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
         }
         setGroupChatName("")
     }
-    const handleSearch = (value) => {
 
+    const handleSearch = async (searchQuery) => {
+        setSearch(searchQuery)
+        if (!searchQuery) return;
+        try {
+            setLoading(true)
+            const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/user?search=${searchQuery}`
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': `bearer ${await getAccessToken()}`
+                }
+            }
+            const { data } = await axios.get(api_url, config)
+            console.log(data)
+            setLoading(false)
+            setSearchResults(data)
+        } catch (error) {
+            toast({
+                title: "Error Occured!",
+                description: "Failed to Load the Search Results",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom-left",
+            });
+        }
     }
 
     return (
@@ -105,9 +185,21 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
                             <Input
                                 placeholder="Add User to group"
                                 mb={1}
+                                value={search}
                                 onChange={(e) => handleSearch(e.target.value)}
                             />
                         </FormControl>
+                        {loading ? (
+                            <Spinner size="lg" />
+                        ) : (
+                            searchResults?.map((searchedUser) => (
+                                <UserListItem
+                                    key={searchedUser.id}
+                                    user={searchedUser}
+                                    handleClick={() => handleAddUser(searchedUser)}
+                                />
+                            ))
+                        )}
                     </ModalBody>
 
                     <ModalFooter>
