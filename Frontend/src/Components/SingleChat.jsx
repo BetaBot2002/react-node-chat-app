@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChatState } from '../Context/ChatProvider'
-import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react'
+import { Box, FormControl, IconButton, Input, Spinner, Text, flattenTokens, useToast } from '@chakra-ui/react'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { getSender } from '../Utils/chat.helper'
 import ProfileModal from './Miscellaneous/ProfileModal'
@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { getAccessToken } from '../Utils/jwt.helper'
 import axios from 'axios'
 import { useEffect } from 'react'
+import ScrollableChat from './ScrollableChat'
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [messages, setMessages] = useState([]);
@@ -146,9 +147,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                                 margin="auto"
                             />)
                             : (
-                                <div>
-                                    Chats
-                                </div>
+                                <Box
+                                    display={"flex"}
+                                    flexDir={"column"}
+                                    overflowY={"scroll"}
+                                    style={{scrollbarWidth:'none'}}
+                                >
+                                    <ScrollableChat messages={messages}/>
+                                </Box>
                             )}
 
                         <FormControl onKeyDown={sendMessage} isRequired mt={3}>
