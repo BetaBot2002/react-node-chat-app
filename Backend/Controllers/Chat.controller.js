@@ -13,7 +13,7 @@ const getOrCreateSingleChat = async (req, res) => {
     // console.log(isChat.length)
 
     if (isChat.length > 0) {
-        res.status(200).send(isChat[0])
+        res.status(200).send({ ...isChat[0], latestMessage: isChat[0].messages[isChat[0].messages.length - 1] })
     } else {
         const chatCreated = await createChat(sender.id, receiver.id)
         res.status(200).send(chatCreated)
@@ -27,7 +27,12 @@ const getAllChatsByUser = async (req, res) => {
     const sender = await findSingleUserIdByEmail(email)
 
     const chats = await getAllChatsByUserId(sender.id)
-    res.status(200).send(chats)
+    res.status(200).send(chats.map((chat) => {
+        return {
+            ...chat,
+            latestMessage: chat.messages[chat.messages.length - 1]
+        }
+    }))
 
 }
 
@@ -73,7 +78,7 @@ const addToGroup = async (req, res) => {
     const currentUser = await findSingleUserIdByEmail(email)
 
     try {
-        const updatedChatWithAddedUser = await addUserToGroup(chatid, userid,currentUser.id)
+        const updatedChatWithAddedUser = await addUserToGroup(chatid, userid, currentUser.id)
         console.log(updatedChatWithAddedUser)
         res.status(200).send(updatedChatWithAddedUser)
     } catch (error) {
@@ -91,7 +96,7 @@ const removeFromGroup = async (req, res) => {
     const currentUser = await findSingleUserIdByEmail(email)
 
     try {
-        const updatedChatWithRemovedUser = await removeUserFromGroup(chatid, userid,currentUser.id)
+        const updatedChatWithRemovedUser = await removeUserFromGroup(chatid, userid, currentUser.id)
         console.log(updatedChatWithRemovedUser)
         res.status(200).send(updatedChatWithRemovedUser)
     } catch (error) {
