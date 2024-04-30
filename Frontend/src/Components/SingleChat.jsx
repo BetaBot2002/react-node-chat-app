@@ -1,25 +1,60 @@
 import React from 'react'
 import { ChatState } from '../Context/ChatProvider'
-import { Box, FormControl, IconButton, Input, Spinner, Text } from '@chakra-ui/react'
+import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { getSender } from '../Utils/chat.helper'
 import ProfileModal from './Miscellaneous/ProfileModal'
 import { Colors } from '../Utils/CSS-Variables'
 import UpdateGroupChatModal from './Miscellaneous/UpdateGroupChatModal'
 import { useState } from 'react'
+import { getAccessToken } from '../Utils/jwt.helper'
+import axios from 'axios'
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [newMessage, setNewMessage] = useState("");
     const { user, selectedChat, setSelectedChat } = ChatState()
+    const toast = useToast()
 
-    const sendMessage = () => {
 
+    const sendMessage = async (e) => {
+        if (e.key === "Enter" && newMessage) {
+            try {
+                const config = {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${await getAccessToken()}`,
+                    },
+                };
+
+                const body = {
+                    content: newMessage,
+                    chatId: selectedChat.id
+                }
+
+                const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/message`
+                setNewMessage("")
+
+                const { data } = await axios.post(api_url, body, config);
+                console.log(data)
+                setMessages([...messages, data])
+            } catch (error) {
+                toast({
+                    title: "Error Occured!",
+                    description: "Failed to send message",
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom-left",
+                });
+
+            }
+        }
     }
 
-    const typingHandler = () => {
-
+    const typingHandler = (e) => {
+        setNewMessage(e.target.value)
     }
 
     return (
