@@ -9,6 +9,7 @@ import UpdateGroupChatModal from './Miscellaneous/UpdateGroupChatModal'
 import { useState } from 'react'
 import { getAccessToken } from '../Utils/jwt.helper'
 import axios from 'axios'
+import { useEffect } from 'react'
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [messages, setMessages] = useState([]);
@@ -17,6 +18,39 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const { user, selectedChat, setSelectedChat } = ChatState()
     const toast = useToast()
 
+    const fetchAllMessages = async () => {
+        if (!selectedChat) return
+        try {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${await getAccessToken()}`,
+                },
+            };
+
+            const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/message/${selectedChat.id}`
+
+            setLoading(true)
+            const { data } = await axios.get(api_url, config);
+            console.log(messages)
+            setMessages(data)
+            setLoading(false)
+        } catch (error) {
+            toast({
+                title: "Error Occured!",
+                description: "Failed to fetch messages",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom-left",
+            });
+
+        }
+    }
+
+    useEffect(() => {
+        fetchAllMessages()
+    }, [selectedChat]);
 
     const sendMessage = async (e) => {
         if (e.key === "Enter" && newMessage) {
