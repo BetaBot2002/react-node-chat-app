@@ -8,7 +8,7 @@ import axios from 'axios'
 import { getAccessToken } from '../../Utils/jwt.helper'
 import UserListItem from '../UserComponents/UserListItem'
 
-const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
+const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchAllMessages }) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { user, selectedChat, setSelectedChat, } = ChatState()
 
@@ -102,6 +102,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
             console.log(data)
             userToBeRemoved.id===user.id? setSelectedChat():setSelectedChat(data)
             setFetchAgain(!fetchAgain)
+            fetchAllMessages()
             setLoading(false)
         } catch (error) {
             toast({
