@@ -21,7 +21,7 @@ model Chats {
   adminIds String[] @db.ObjectId
   admins   Users[]  @relation(name: "Admins", fields: [adminIds], references: [id])
 
-  messages Messages[]
+  messages Messages[] @relation(name: "msg")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -60,8 +60,8 @@ model Messages {
   readersIds String[] @db.ObjectId
   readers    Users[]  @relation(name: "Read", fields: [readersIds], references: [id])
 
-  chatId   String?  @db.ObjectId
-  chat Chats? @relation(fields: [chatId], references: [id])
+  chatId String @db.ObjectId
+  chat   Chats  @relation(name: "msg", fields: [chatId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

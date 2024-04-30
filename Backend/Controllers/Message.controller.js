@@ -6,8 +6,12 @@ const sendMessage=async (req,res)=>{
     const { email } = req
     const sender = await findSingleUserIdByEmail(email)
 
-    let data=await createNewMessage(sender.id,content,chatId)
-    res.send(data)
+    try {
+        let data=await createNewMessage(sender.id,content,chatId)
+        res.status(200).send(data)
+    } catch (error) {
+        res.status(400)
+    }
 
 }
 
