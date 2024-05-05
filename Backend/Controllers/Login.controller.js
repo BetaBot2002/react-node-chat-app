@@ -44,6 +44,7 @@ const login = async (req, res) => {
         res.status(CustomStatusCodes.SUCCESS).send({
             accessToken: accessToken,
             refreshToken: refreshToken,
+            userId:user.id,
             code: CustomStatusCodes.SUCCESS
         })
     }

@@ -36,6 +36,13 @@ const io = new Server(server, {
 
 io.on("connection",(socket)=>{
     console.log("Connected to socket");
+
+    socket.on("setup",(userData)=>{
+        socket.join(userData.id)
+        console.log("server:",userData.id);
+        console.log("server user:",userData?userData:{ms:`faild`});
+        socket.emit("connected")
+    })
 })
 
 

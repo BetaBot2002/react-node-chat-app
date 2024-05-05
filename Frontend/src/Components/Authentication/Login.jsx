@@ -11,7 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isShown, setIsShown] = useState(false)
-  const {getUser}=ChatState()
+  const {getUser,setUser}=ChatState()
   const toast=useToast()
   const navigate=useNavigate()
   const submitHandler = async () => {
@@ -27,8 +27,10 @@ const Login = () => {
           "Content-type": "application/json",
         }
       })
+      console.log(response.data)
       setAccessToken(response.data.accessToken)
       setRefreshToken(response.data.refreshToken)
+      setUser({id:response.data.userId})
       getUser()
       
       navigate("/")
