@@ -39,9 +39,25 @@ io.on("connection",(socket)=>{
 
     socket.on("setup",(userData)=>{
         socket.join(userData.id)
-        console.log("server:",userData.id);
-        console.log("server user:",userData?userData:{ms:`faild`});
         socket.emit("connected")
+
+        socket.on("join chat",(room)=>{
+            socket.join(room)
+            console.log("user joined: "+room)
+        })
+
+        socket.on("new message",(newMessageReceived)=>{
+            console.log(newMessageReceived)
+            var chat=newMessageReceived.chat
+
+            if(!chat.users) return console.log("users not defined in chat")
+            console.log(chat.users)
+
+            chat.users.forEach(user => {
+                if(user.id===newMessageReceived.sender.id) return
+                socket.in(user.id).emit("message received",newMessageReceived)
+            });
+        })
     })
 })
 

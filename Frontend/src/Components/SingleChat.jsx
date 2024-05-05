@@ -13,8 +13,8 @@ import { useEffect } from 'react'
 import ScrollableChat from './ScrollableChat'
 import io from 'socket.io-client'
 
-const ENDPOINT=import.meta.env.VITE_APP_BACKEND_API
-var socket,selectedChatCompare
+const ENDPOINT = import.meta.env.VITE_APP_BACKEND_API
+var socket, selectedChatCompare
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [messages, setMessages] = useState([]);
@@ -41,6 +41,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             console.log(messages)
             setMessages(data)
             setLoading(false)
+            socket.emit("join chat", selectedChat.id)
         } catch (error) {
             toast({
                 title: "Error Occured!",
@@ -54,9 +55,30 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         }
     }
 
+    
+    useEffect(() => {
+        socket = io(ENDPOINT)
+        socket.emit("setup", user)
+        socket.on("connected", () => {
+            setSocketConnected(true)
+        })
+    }, [])
+
     useEffect(() => {
         fetchAllMessages()
+        selectedChatCompare = selectedChat
     }, [selectedChat]);
+
+    useEffect(() => {
+        socket.on("message received", (newMessageReceived) => {
+            if(!selectedChatCompare || selectedChatCompare.id !== newMessageReceived.chat.id ) {
+                console.log("noti")
+            }else{
+                console.log("msg")
+                setMessages([...messages,newMessageReceived])
+            }
+        })
+    });
 
     const sendMessage = async (e) => {
         if (e.key === "Enter" && newMessage) {
@@ -78,6 +100,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
                 const { data } = await axios.post(api_url, body, config);
                 console.log(data)
+                socket.emit("new message",data)
                 setMessages([...messages, data])
             } catch (error) {
                 toast({
@@ -93,14 +116,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         }
     }
 
-    useEffect(()=>{
-        socket=io(ENDPOINT)
-        socket.emit("setup",user)
-        console.log(user)
-        socket.on("connection",()=>{
-            setSocketConnected(true)
-        })
-    },[])
 
     const typingHandler = (e) => {
         setNewMessage(e.target.value)
@@ -165,9 +180,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                                     display={"flex"}
                                     flexDir={"column"}
                                     overflowY={"scroll"}
-                                    style={{scrollbarWidth:'none'}}
+                                    style={{ scrollbarWidth: 'none' }}
                                 >
-                                    <ScrollableChat messages={messages}/>
+                                    <ScrollableChat messages={messages} />
                                 </Box>
                             )}
 
