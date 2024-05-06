@@ -25,7 +25,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [socketConnected, setSocketConnected] = useState(false)
     const [typing, setTyping] = useState(false)
     const [isTyping, setIsTyping] = useState(false)
-    const { user, selectedChat, setSelectedChat,notifiactions, setNotifiactions } = ChatState()
+    const { user, selectedChat, setSelectedChat,notifiactions, setNotifiactions,latestMessagesByChatId, setLatestMessagesByChatId } = ChatState()
     const toast = useToast()
 
     const defaultOptions = {
@@ -103,6 +103,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             } else {
                 setMessages([...messages, newMessageReceived])
             }
+            setLatestMessagesByChatId({
+                ...latestMessagesByChatId,
+                [selectedChat.id]:newMessageReceived
+            })
         })
     });
 
@@ -128,6 +132,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 const { data } = await axios.post(api_url, body, config);
                 socket.emit("new message", data)
                 setMessages([...messages, data])
+                setLatestMessagesByChatId({
+                    ...latestMessagesByChatId,
+                    [selectedChat.id]:data
+                })
             } catch (error) {
                 toast({
                     title: "Error Occured!",

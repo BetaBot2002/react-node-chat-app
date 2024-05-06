@@ -8,6 +8,7 @@ const ChatProvider = ({ children }) => {
     const [selectedChat, setSelectedChat] = useState()
     const [chats, setChats] = useState([])
     const [notifiactions, setNotifiactions] = useState([])
+    const [latestMessagesByChatId, setLatestMessagesByChatId] = useState({})
 
 
     const getUser = async () => {
@@ -36,7 +37,7 @@ const ChatProvider = ({ children }) => {
             })
     }, [])
 
-    return <ChatContext.Provider value={{ user, setUser, getUser,selectedChat, setSelectedChat,chats, setChats,notifiactions, setNotifiactions }}>{children}</ChatContext.Provider>
+    return <ChatContext.Provider value={{ user, setUser, getUser,selectedChat, setSelectedChat,chats, setChats,notifiactions, setNotifiactions,latestMessagesByChatId, setLatestMessagesByChatId }}>{children}</ChatContext.Provider>
 }
 
 export const ChatState = () => {

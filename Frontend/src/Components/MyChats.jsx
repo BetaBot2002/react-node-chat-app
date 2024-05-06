@@ -10,9 +10,10 @@ import ChatLoading from './ChatLoading'
 import { getSender } from '../Utils/chat.helper'
 import GroupChatModal from './Miscellaneous/GroupChatModal'
 
-const MyChats = ({fetchAgain}) => {
-  const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState()
-
+const MyChats = ({ fetchAgain }) => {
+  const { user, selectedChat, setSelectedChat, chats, setChats, latestMessagesByChatId, setLatestMessagesByChatId } = ChatState()
+  const [chatLoading, setChatLoading] = useState();
+  let latestMessages = {}
   const toast = useToast()
 
   const fetchChats = async () => {
@@ -23,9 +24,16 @@ const MyChats = ({fetchAgain}) => {
           Authorization: `Bearer ${await getAccessToken()}`,
         },
       };
-
+      setChatLoading(true)
       const { data } = await axios.get(`${import.meta.env.VITE_APP_BACKEND_API}/chat`, config);
-      console.log(data)
+      setChatLoading(false)
+      console.log("chats: ", data)
+      data.forEach(chat => {
+          if(chat.latestMessage){
+            latestMessages[chat.id]=chat.latestMessage
+          }
+      });
+      setLatestMessagesByChatId(latestMessages)
       setChats(data);
     } catch (error) {
       toast({
@@ -102,7 +110,7 @@ const MyChats = ({fetchAgain}) => {
                     borderRadius="lg"
                     key={chat.id}
                   >
-                    <Text>
+                    <Text fontWeight={"bold"}>
                       {
                         !chat.isGroupChat
                           ? (
@@ -111,15 +119,18 @@ const MyChats = ({fetchAgain}) => {
                           : chat.chatName
                       }
                     </Text>
-
+                    <Text fontSize={16} display={"flex"} flexDir={"row"}>
+                      {chat.isGroupChat && <Text fontWeight={"semibold"} marginRight={2}>{latestMessagesByChatId[chat.id]?.sender.name}{latestMessagesByChatId[chat.id] && ":"}</Text>} {latestMessagesByChatId[chat.id]?.content}
+                    </Text>
                   </Box>
                 ))
               }
             </Stack>
           ) : (
-            <ChatLoading></ChatLoading>
+            <>No Chats Yet</>
           )
         }
+        {chatLoading && <ChatLoading></ChatLoading>}
       </Box>
     </Box>
   )
