@@ -25,7 +25,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [socketConnected, setSocketConnected] = useState(false)
     const [typing, setTyping] = useState(false)
     const [isTyping, setIsTyping] = useState(false)
-    const { user, selectedChat, setSelectedChat } = ChatState()
+    const { user, selectedChat, setSelectedChat,notifiactions, setNotifiactions } = ChatState()
     const toast = useToast()
 
     const defaultOptions = {
@@ -51,7 +51,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
             setLoading(true)
             const { data } = await axios.get(api_url, config);
-            console.log(messages)
             setMessages(data)
             setLoading(false)
             socket.emit("join chat", selectedChat.id)
@@ -89,12 +88,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         selectedChatCompare = selectedChat
     }, [selectedChat]);
 
+    console.log(notifiactions)
+
     useEffect(() => {
         socket.on("message received", (newMessageReceived) => {
             if (!selectedChatCompare || selectedChatCompare.id !== newMessageReceived.chat.id) {
-                console.log("notification")
+                if(!notifiactions.includes(newMessageReceived)){
+                    setNotifiactions([newMessageReceived,...notifiactions])
+                    setFetchAgain(!fetchAgain)
+                }
             } else {
-                console.log("msg")
                 setMessages([...messages, newMessageReceived])
             }
         })
@@ -120,7 +123,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 setNewMessage("")
 
                 const { data } = await axios.post(api_url, body, config);
-                console.log(data)
                 socket.emit("new message", data)
                 setMessages([...messages, data])
             } catch (error) {
@@ -141,7 +143,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const typingHandler = (e) => {
         setNewMessage(e.target.value)
 
-        if (!socketConnected) return
+        if (!socketConnected) {
+            console.log("Socket not connected")
+            return
+        }
         if (!typing) {
             setTyping(true)
             socket.emit("typing", selectedChat.id)
