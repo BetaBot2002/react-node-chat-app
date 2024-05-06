@@ -21,6 +21,7 @@ import axios from 'axios'
 import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken } from '../../Utils/jwt.helper'
 import ChatLoading from '../ChatLoading'
 import UserListItem from '../UserComponents/UserListItem'
+import { getSender } from '../../Utils/chat.helper'
 
 
 const SideDrawer = () => {
@@ -32,7 +33,7 @@ const SideDrawer = () => {
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const { user, setUser,setSelectedChat,chats, setChats } = ChatState()
+  const { user, setUser,setSelectedChat,chats, setChats,notifiactions, setNotifiactions } = ChatState()
   const handleLogout = async () => {
     const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/user/logout`
     try {
@@ -165,6 +166,23 @@ const SideDrawer = () => {
             <MenuButton p={1}>
               <BellIcon boxSize={6} color={Colors.theme_dark} />
             </MenuButton>
+            <MenuList paddingLeft={2}>
+              {!notifiactions.length && <Text color={Colors.theme_dark} paddingLeft={3}>No New Messages</Text>}
+              {notifiactions.map((notifiaction) => (
+                <MenuItem
+                  key={notifiaction.id}
+                  onClick={() => {
+                    setSelectedChat(notifiaction.chat);
+                    setNotifiactions(notifiactions.filter((n) => n !== notifiaction));
+                  }}
+                  color={Colors.theme_dark}
+                >
+                  {notifiaction.chat.isGroupChat
+                    ? `New Message in ${notifiaction.chat.chatName}`
+                    : `New Message from ${getSender(user, notifiaction.chat.users).name}`}
+                </MenuItem>
+              ))}
+            </MenuList>
           </Menu>
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />} background={'transparent'} _hover={{ background: 'transparent' }}>
