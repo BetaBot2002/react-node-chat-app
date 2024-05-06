@@ -91,6 +91,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     console.log(notifiactions)
 
     useEffect(() => {
+        socket.on("hello",(value)=>{
+            console.log(value)
+        })
         socket.on("message received", (newMessageReceived) => {
             if (!selectedChatCompare || selectedChatCompare.id !== newMessageReceived.chat.id) {
                 if(!notifiactions.includes(newMessageReceived)){

@@ -30,6 +30,7 @@ const Login = () => {
       console.log(response.data)
       setAccessToken(response.data.accessToken)
       setRefreshToken(response.data.refreshToken)
+      localStorage.setItem("userId",response.data.userId)
       setUser({id:response.data.userId})
       getUser()
       

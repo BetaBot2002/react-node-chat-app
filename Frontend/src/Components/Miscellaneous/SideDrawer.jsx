@@ -47,6 +47,7 @@ const SideDrawer = () => {
       setUser({})
       setSelectedChat("")
       setChats([])
+      localStorage.removeItem("userId")
 
       navigate("/registration")
     } catch (error) {

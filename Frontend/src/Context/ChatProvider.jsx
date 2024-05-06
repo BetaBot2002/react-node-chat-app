@@ -4,7 +4,7 @@ import { getRefreshToken } from '../Utils/jwt.helper'
 const ChatContext = createContext()
 
 const ChatProvider = ({ children }) => {
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState({id:localStorage.getItem("userId")})
     const [selectedChat, setSelectedChat] = useState()
     const [chats, setChats] = useState([])
     const [notifiactions, setNotifiactions] = useState([])
