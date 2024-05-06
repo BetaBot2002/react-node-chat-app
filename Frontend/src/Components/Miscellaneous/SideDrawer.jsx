@@ -163,8 +163,11 @@ const SideDrawer = () => {
         </Text>
         <div>
           <Menu>
-            <MenuButton p={1}>
+            <MenuButton p={1} position={'relative'}>
               <BellIcon boxSize={6} color={Colors.theme_dark} />
+              <Box position={'absolute'} top={0} right={0} color={Colors.theme_bold_red} fontWeight={700}>
+                {notifiactions.length>0?notifiactions.length:""}
+              </Box>
             </MenuButton>
             <MenuList paddingLeft={2}>
               {!notifiactions.length && <Text color={Colors.theme_dark} paddingLeft={3}>No New Messages</Text>}
