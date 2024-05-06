@@ -120,7 +120,7 @@ const MyChats = ({ fetchAgain }) => {
                       }
                     </Text>
                     <Text fontSize={16} display={"flex"} flexDir={"row"}>
-                      {chat.isGroupChat && <Text fontWeight={"semibold"} marginRight={2}>{latestMessagesByChatId[chat.id]?.sender.name}{latestMessagesByChatId[chat.id] && ":"}</Text>} {latestMessagesByChatId[chat.id]?.content}
+                      {chat.isGroupChat && <span style={{fontWeight:'600', marginRight:'5px'}}>{latestMessagesByChatId[chat.id]?.sender.name}{latestMessagesByChatId[chat.id] && ":"}</span>} {latestMessagesByChatId[chat.id]?.content}
                     </Text>
                   </Box>
                 ))
