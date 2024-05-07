@@ -30,7 +30,7 @@ const MyChats = ({ fetchAgain }) => {
       console.log("chats: ", data)
       data.forEach(chat => {
           if(chat.latestMessage){
-            latestMessages[chat.id]=chat.latestMessage
+            latestMessages[chat.id]=chat.latestMessage //We Cannot directly use setLatestMessagesByChatId() inside forEach as the state does not updates immediately
           }
       });
       setLatestMessagesByChatId(latestMessages)
