@@ -96,7 +96,7 @@ const MyChats = ({ fetchAgain }) => {
         overflowY="hidden"
       >
         {
-          chats ? (
+          chats.length ? (
             <Stack overflowY={"scroll"}>
               {
                 chats.map((chat) => (
@@ -131,14 +131,23 @@ const MyChats = ({ fetchAgain }) => {
                           {latestMessagesByChatId[chat.id] && ":"}
                         </Text>
                       }
-                      {latestMessagesByChatId[chat.id]?.content}
+                      <Text noOfLines={2}>
+                        {latestMessagesByChatId[chat.id]?.content}
+                      </Text>
                     </Box>
                   </Box>
                 ))
               }
             </Stack>
           ) : (
-            <>No Chats Yet</>
+            <Box display={"flex"} flexDir={"column"}>
+              <Text color={Colors.theme_dark} fontFamily={"helvetica"} fontWeight={"bold"} fontSize={25}>
+                No Chats Yet
+              </Text>
+              <Text color={Colors.theme_dark} fontWeight={"semibold"}>
+                  Search for a user or Create a new group
+              </Text>
+            </Box>
           )
         }
         {chatLoading && <ChatLoading></ChatLoading>}
