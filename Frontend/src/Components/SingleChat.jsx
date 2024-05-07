@@ -25,7 +25,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [socketConnected, setSocketConnected] = useState(false)
     const [typing, setTyping] = useState(false)
     const [isTyping, setIsTyping] = useState(false)
-    const { user, selectedChat, setSelectedChat,notifiactions, setNotifiactions,latestMessagesByChatId, setLatestMessagesByChatId,chats , unreadMessagesByChatId, setUnreadMessagesByChatId} = ChatState()
+    const { user, selectedChat, setSelectedChat, notifiactions, setNotifiactions, latestMessagesByChatId, setLatestMessagesByChatId, chats, unreadMessagesByChatId, setUnreadMessagesByChatId } = ChatState()
     const toast = useToast()
 
     const defaultOptions = {
@@ -91,30 +91,33 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     console.log(notifiactions)
 
     useEffect(() => {
-        socket.on("hello",(value)=>{
+        socket.on("hello", (value) => {
             console.log(value)
         })
         socket.on("message received", (newMessageReceived) => {
             if (!selectedChatCompare || selectedChatCompare.id !== newMessageReceived.chat.id) {
-                if(!notifiactions.includes(newMessageReceived)){
-                    setNotifiactions([newMessageReceived,...notifiactions])
-                    // setFetchAgain(!fetchAgain)
-                    let isNewChat=!(chats.map(chat=>{
-                        return chat.id
-                    }).includes(newMessageReceived.chat.id))
-                    setUnreadMessagesByChatId({
-                        ...unreadMessagesByChatId,
-                        [newMessageReceived.chat.id]:[...(unreadMessagesByChatId[newMessageReceived.chat.id] || []),newMessageReceived]
-                    })
-                    if(isNewChat) setFetchAgain(!fetchAgain)
-                    
+                if (!notifiactions.includes(newMessageReceived)) {
+                    setNotifiactions([newMessageReceived, ...notifiactions])
+                    // setFetchAgain(!fetchAgain)       
                 }
+                let isNewChat=false;
+                isNewChat = !(chats.map(chat => {
+                    console.log(chat.id + " " + newMessageReceived.chat.id)
+                    return chat.id
+                }).includes(newMessageReceived.chat.id))
+                console.log("new " + isNewChat);
+                if (isNewChat) setFetchAgain(!fetchAgain)
+
+                setUnreadMessagesByChatId({
+                    ...unreadMessagesByChatId,
+                    [newMessageReceived.chat.id]: [...(unreadMessagesByChatId[newMessageReceived.chat.id] || []), newMessageReceived]
+                })
             } else {
                 setMessages([...messages, newMessageReceived])
             }
             setLatestMessagesByChatId({
                 ...latestMessagesByChatId,
-                [newMessageReceived.chat.id]:newMessageReceived
+                [newMessageReceived.chat.id]: newMessageReceived
             })
         })
     });
@@ -143,7 +146,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 setMessages([...messages, data])
                 setLatestMessagesByChatId({
                     ...latestMessagesByChatId,
-                    [selectedChat.id]:data
+                    [selectedChat.id]: data
                 })
             } catch (error) {
                 toast({
