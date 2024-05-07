@@ -129,7 +129,8 @@ const MyChats = ({ fetchAgain }) => {
                             "You" :
                             latestMessagesByChatId[chat.id]?.sender.name}
                           {latestMessagesByChatId[chat.id] && ":"}
-                        </Text>}
+                        </Text>
+                      }
                       {latestMessagesByChatId[chat.id]?.content}
                     </Box>
                   </Box>
