@@ -25,7 +25,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [socketConnected, setSocketConnected] = useState(false)
     const [typing, setTyping] = useState(false)
     const [isTyping, setIsTyping] = useState(false)
-    const { user, selectedChat, setSelectedChat,notifiactions, setNotifiactions,latestMessagesByChatId, setLatestMessagesByChatId } = ChatState()
+    const { user, selectedChat, setSelectedChat,notifiactions, setNotifiactions,latestMessagesByChatId, setLatestMessagesByChatId,chats } = ChatState()
     const toast = useToast()
 
     const defaultOptions = {
@@ -99,6 +99,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 if(!notifiactions.includes(newMessageReceived)){
                     setNotifiactions([newMessageReceived,...notifiactions])
                     // setFetchAgain(!fetchAgain)
+                    let isNewChat=!(chats.map(chat=>{
+                        return chat.id
+                    }).includes(newMessageReceived.chat.id))
+                    if(isNewChat) setFetchAgain(!fetchAgain)
                 }
             } else {
                 setMessages([...messages, newMessageReceived])
