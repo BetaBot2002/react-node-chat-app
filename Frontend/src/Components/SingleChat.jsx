@@ -98,14 +98,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             if (!selectedChatCompare || selectedChatCompare.id !== newMessageReceived.chat.id) {
                 if(!notifiactions.includes(newMessageReceived)){
                     setNotifiactions([newMessageReceived,...notifiactions])
-                    setFetchAgain(!fetchAgain)
+                    // setFetchAgain(!fetchAgain)
                 }
             } else {
                 setMessages([...messages, newMessageReceived])
             }
             setLatestMessagesByChatId({
                 ...latestMessagesByChatId,
-                [selectedChat.id]:newMessageReceived
+                [newMessageReceived.chat.id]:newMessageReceived
             })
         })
     });
