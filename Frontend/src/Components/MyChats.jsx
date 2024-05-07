@@ -11,9 +11,10 @@ import { getSender } from '../Utils/chat.helper'
 import GroupChatModal from './Miscellaneous/GroupChatModal'
 
 const MyChats = ({ fetchAgain }) => {
-  const { user, selectedChat, setSelectedChat, chats, setChats, latestMessagesByChatId, setLatestMessagesByChatId } = ChatState()
+  const { user, selectedChat, setSelectedChat, chats, setChats, latestMessagesByChatId, setLatestMessagesByChatId, unreadMessagesByChatId, setUnreadMessagesByChatId } = ChatState()
   const [chatLoading, setChatLoading] = useState();
   let latestMessages = {}
+  let unreadMessages = {}
   const toast = useToast()
 
   const fetchChats = async () => {
@@ -35,10 +36,16 @@ const MyChats = ({ fetchAgain }) => {
       });
       setLatestMessagesByChatId(latestMessages)
       setChats(data);
+      data.forEach(chat => {
+        unreadMessages[chat.id] = chat.messages.map(msg => {
+          if (!msg.readersIds.includes(user.id)) return msg
+        })
+      })
+      setUnreadMessagesByChatId(unreadMessages)
     } catch (error) {
       toast({
         title: "Error Occured!",
-        description: "Failed to Load the chats",
+        description: "Failed to Load the chats" + error,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -110,15 +117,22 @@ const MyChats = ({ fetchAgain }) => {
                     borderRadius="lg"
                     key={chat.id}
                   >
-                    <Text fontWeight={"bold"}>
-                      {
-                        !chat.isGroupChat
-                          ? (
-                            getSender(user, chat.users).name
-                          )
-                          : chat.chatName
-                      }
-                    </Text>
+                    <Box display={"flex"} flexDir={"row"} justifyContent={"space-between"}>
+                      <Text fontWeight={"bold"}>
+                        {
+                          !chat.isGroupChat
+                            ? (
+                              getSender(user, chat.users).name
+                            )
+                            : chat.chatName
+                        }
+                      </Text>
+                      <Box>
+                        <Text color={Colors.theme_bold_red} fontWeight={"semibold"} fontSize={15}>
+                          {unreadMessagesByChatId[chat.id]?.length?unreadMessagesByChatId[chat.id]?.length:""}
+                        </Text>
+                      </Box>
+                    </Box>
                     <Box fontSize={16} display={"flex"} flexDir={"row"}>
                       {chat.isGroupChat &&
                         <Text
@@ -145,7 +159,7 @@ const MyChats = ({ fetchAgain }) => {
                 No Chats Yet
               </Text>
               <Text color={Colors.theme_dark} fontWeight={"semibold"}>
-                  Search for a user or Create a new group
+                Search for a user or Create a new group
               </Text>
             </Box>
           )
