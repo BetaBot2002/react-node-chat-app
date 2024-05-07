@@ -166,13 +166,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     setNotifiactions([newMessageReceived, ...notifiactions])
                     // setFetchAgain(!fetchAgain)       
                 }
-                let isNewChat = false;
-                isNewChat = !(chats.map(chat => {
+                let refresh = false;
+                let isNewChat = !(chats.map(chat => {
                     console.log(chat.id + " " + newMessageReceived.chat.id)
+                    refresh=true
                     return chat.id
                 }).includes(newMessageReceived.chat.id))
                 console.log("new " + isNewChat);
-                if (isNewChat) setFetchAgain(!fetchAgain)
+                if (isNewChat && refresh) setFetchAgain(!fetchAgain)
 
                 setUnreadMessagesByChatId({
                     ...unreadMessagesByChatId,
