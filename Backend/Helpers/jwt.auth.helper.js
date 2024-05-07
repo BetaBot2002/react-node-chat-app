@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { CustomStatusCodes } from '../Utilities/CustomStatusCodes.js'
 
-const tokenExpiryTime = 15
+const tokenExpiryTime = '15m'
 
 const signUser = (email) => {
     const AccessToken = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: tokenExpiryTime })

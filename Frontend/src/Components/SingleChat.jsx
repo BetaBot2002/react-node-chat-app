@@ -67,6 +67,74 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         }
     }
 
+    const readAllMessages = async () => {
+        if (!selectedChat) return
+        if (!unreadMessagesByChatId[selectedChat.id] || !unreadMessagesByChatId[selectedChat.id].length) return
+        let unreadMessagesString = JSON.stringify(unreadMessagesByChatId[selectedChat.id].map(msg=>{return msg.id}))
+        console.log(unreadMessagesString)
+        console.log(unreadMessagesByChatId)
+        try {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${await getAccessToken()}`,
+                },
+            };
+
+            const body = {
+                messageIds: unreadMessagesString,
+                userId: user.id
+            }
+            const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/message/read`
+            const { data } = await axios.post(api_url, body, config);
+            console.log("updatedChats ",data)
+            setUnreadMessagesByChatId({
+                ...unreadMessagesByChatId,
+                [selectedChat.id]: []
+            })
+        } catch (error) {
+            toast({
+                title: "Error Occured!",
+                description: "Failed to read messages"+error,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom-left",
+            });
+        }
+
+    }
+
+    
+    const readSingleMessage=async (messageId)=>{
+        try {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${await getAccessToken()}`,
+                },
+            };
+
+            const body = {
+                messageIds: JSON.stringify([messageId]),
+                userId: user.id
+            }
+            const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/message/read`
+            const { data } = await axios.post(api_url, body, config);
+            console.log("updatedChats ",data)
+        } catch (error) {
+            toast({
+                title: "Error Occured!",
+                description: "Failed to read messages"+error,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom-left",
+            });
+        }
+
+    }
+
     useEffect(() => {
         socket = io(ENDPOINT)
         socket.emit("setup", user)
@@ -85,22 +153,20 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     useEffect(() => {
         fetchAllMessages()
+        readAllMessages()
         selectedChatCompare = selectedChat
     }, [selectedChat]);
 
     console.log(notifiactions)
 
     useEffect(() => {
-        socket.on("hello", (value) => {
-            console.log(value)
-        })
-        socket.on("message received", (newMessageReceived) => {
+        socket.on("message received", async (newMessageReceived) => {
             if (!selectedChatCompare || selectedChatCompare.id !== newMessageReceived.chat.id) {
                 if (!notifiactions.includes(newMessageReceived)) {
                     setNotifiactions([newMessageReceived, ...notifiactions])
                     // setFetchAgain(!fetchAgain)       
                 }
-                let isNewChat=false;
+                let isNewChat = false;
                 isNewChat = !(chats.map(chat => {
                     console.log(chat.id + " " + newMessageReceived.chat.id)
                     return chat.id
@@ -114,6 +180,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 })
             } else {
                 setMessages([...messages, newMessageReceived])
+                console.log(newMessageReceived.id)
+                await readSingleMessage(newMessageReceived.id)
             }
             setLatestMessagesByChatId({
                 ...latestMessagesByChatId,
@@ -121,6 +189,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             })
         })
     });
+
 
     const sendMessage = async (e) => {
         if (e.key === "Enter" && newMessage) {
@@ -148,6 +217,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     ...latestMessagesByChatId,
                     [selectedChat.id]: data
                 })
+                await readSingleMessage(data.id)
             } catch (error) {
                 toast({
                     title: "Error Occured!",

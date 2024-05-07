@@ -22,23 +22,23 @@ const selectedChatFields = {
     },
 }
 
-const selectedMessageFields={
-    id : true,
-    content : true,
-  
-    senderId : true,
-    sender   :{
-        select:selectedUserFields
+const selectedMessageFields = {
+    id: true,
+    content: true,
+
+    senderId: true,
+    sender: {
+        select: selectedUserFields
     },
-  
-    readersIds : true,
-    readers    : {
-        select:selectedUserFields
+
+    readersIds: true,
+    readers: {
+        select: selectedUserFields
     },
-  
-    chatId : true,
-    chat   : {
-        select:selectedChatFields
+
+    chatId: true,
+    chat: {
+        select: selectedChatFields
     },
 }
 
@@ -64,24 +64,38 @@ const createNewMessage = async (userId, content, chatId) => {
     })
 }
 
-const getAllMessagesByChatId=async(chatId)=>{
+const getAllMessagesByChatId = async (chatId) => {
     return await prisma.messages.findMany({
-        where:{
-            chatId:chatId
+        where: {
+            chatId: chatId
         },
-        include:{
-            sender:{
-                select:selectedUserFields
+        include: {
+            sender: {
+                select: selectedUserFields
             },
-            readers:{
-                select:selectedUserFields
+            readers: {
+                select: selectedUserFields
             },
-            chat:true
+            chat: true
         }
     })
 }
 
+const addReader = async (messageIds, userId) => {
+
+    return await prisma.messages.updateMany({
+        where: {
+            id: { in: messageIds },
+        },
+        data: {
+            readersIds: {
+                push: userId,
+            },
+        },
+    })
+}
 export {
     createNewMessage,
-    getAllMessagesByChatId
+    getAllMessagesByChatId,
+    addReader
 }

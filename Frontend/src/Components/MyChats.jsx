@@ -37,8 +37,8 @@ const MyChats = ({ fetchAgain }) => {
       setLatestMessagesByChatId(latestMessages)
       setChats(data);
       data.forEach(chat => {
-        unreadMessages[chat.id] = chat.messages.map(msg => {
-          if (!msg.readersIds.includes(user.id)) return msg
+        unreadMessages[chat.id] = chat.messages.filter(msg => {
+          return !msg.readersIds.includes(user.id)
         })
       })
       setUnreadMessagesByChatId(unreadMessages)

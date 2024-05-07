@@ -1,4 +1,4 @@
-import { createNewMessage, getAllMessagesByChatId } from "../Database/Messages.query.js"
+import { addReader, createNewMessage, getAllMessagesByChatId } from "../Database/Messages.query.js"
 import { findSingleUserIdByEmail } from "../Database/Users.query.js"
 
 const sendMessage=async (req,res)=>{
@@ -31,7 +31,22 @@ const getAllMessages=async (req,res)=>{
 
 }
 
+const readMessage=async (req,res)=>{
+    let {messageIds,userId}=req.body
+    messageIds=JSON.parse(messageIds)
+    try {
+        const updatedMessage=await addReader(messageIds,userId)
+        res.status(200).send(updatedMessage)
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            message:error.message
+        })
+    }
+}
+
 export {
     sendMessage,
-    getAllMessages
+    getAllMessages,
+    readMessage
 }
