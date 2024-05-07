@@ -29,9 +29,9 @@ const MyChats = ({ fetchAgain }) => {
       setChatLoading(false)
       console.log("chats: ", data)
       data.forEach(chat => {
-          if(chat.latestMessage){
-            latestMessages[chat.id]=chat.latestMessage //We Cannot directly use setLatestMessagesByChatId() inside forEach as the state does not updates immediately
-          }
+        if (chat.latestMessage) {
+          latestMessages[chat.id] = chat.latestMessage //We Cannot directly use setLatestMessagesByChatId() inside forEach as the state does not updates immediately
+        }
       });
       setLatestMessagesByChatId(latestMessages)
       setChats(data);
@@ -119,9 +119,19 @@ const MyChats = ({ fetchAgain }) => {
                           : chat.chatName
                       }
                     </Text>
-                    <Text fontSize={16} display={"flex"} flexDir={"row"}>
-                      {chat.isGroupChat && <span style={{fontWeight:'600', marginRight:'5px'}}>{latestMessagesByChatId[chat.id]?.sender.name}{latestMessagesByChatId[chat.id] && ":"}</span>} {latestMessagesByChatId[chat.id]?.content}
-                    </Text>
+                    <Box fontSize={16} display={"flex"} flexDir={"row"}>
+                      {chat.isGroupChat &&
+                        <Text
+                          fontWeight={'semibold'}
+                          marginRight={1}
+                        >
+                          {latestMessagesByChatId[chat.id]?.sender.id === user.id ?
+                            "You" :
+                            latestMessagesByChatId[chat.id]?.sender.name}
+                          {latestMessagesByChatId[chat.id] && ":"}
+                        </Text>}
+                      {latestMessagesByChatId[chat.id]?.content}
+                    </Box>
                   </Box>
                 ))
               }
