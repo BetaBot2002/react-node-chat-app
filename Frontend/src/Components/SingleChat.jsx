@@ -167,6 +167,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     // setFetchAgain(!fetchAgain)       
                 }
                 let refresh = false;
+                if (!chats.length) refresh=true
                 let isNewChat = !(chats.map(chat => {
                     console.log(chat.id + " " + newMessageReceived.chat.id)
                     refresh=true
