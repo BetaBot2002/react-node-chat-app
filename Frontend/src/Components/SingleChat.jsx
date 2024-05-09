@@ -160,16 +160,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     useEffect(() => {
         socket.on("message received", async (newMessageReceived) => {
             if (!selectedChatCompare || selectedChatCompare.id !== newMessageReceived.chat.id) {
-                // let refresh = false;
-                // if (!chats.length) refresh=true
-                let isNewChat = !(chats.map(chat => {
-                    console.log(chat.id + " " + newMessageReceived.chat.id)
-                    // refresh=true
-                    return chat.id
-                }).includes(newMessageReceived.chat.id))
-                console.log("new " + isNewChat);
-                if (isNewChat) setFetchAgain(!fetchAgain)
-
                 setUnreadMessagesByChatId({
                     ...unreadMessagesByChatId,
                     [newMessageReceived.chat.id]: [...(unreadMessagesByChatId[newMessageReceived.chat.id] || []), newMessageReceived]
@@ -183,6 +173,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 ...latestMessagesByChatId,
                 [newMessageReceived.chat.id]: newMessageReceived
             })
+            setFetchAgain(!fetchAgain)
         })
     });
 
@@ -214,6 +205,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     [selectedChat.id]: data
                 })
                 await readSingleMessage(data.id)
+                setFetchAgain(!fetchAgain)
             } catch (error) {
                 toast({
                     title: "Error Occured!",
