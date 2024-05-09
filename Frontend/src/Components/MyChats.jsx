@@ -156,7 +156,7 @@ const MyChats = ({ fetchAgain }) => {
                 ))
               }
             </Stack>
-          ) : (
+          ) :chatLoading?<></> :(
             <Box display={"flex"} flexDir={"column"}>
               <Text color={Colors.theme_dark} fontFamily={"helvetica"} fontWeight={"bold"} fontSize={25}>
                 No Chats Yet
