@@ -20,8 +20,8 @@ const MyChats = ({ fetchAgain }) => {
 
   const comparator = (a, b) => {
     // Get the creation time of the latest message of each object
-    const aTime = a.latestMessage ? new Date(a.latestMessage.createdAt).getTime() : Number.MIN_SAFE_INTEGER;
-    const bTime = b.latestMessage ? new Date(b.latestMessage.createdAt).getTime() : Number.MIN_SAFE_INTEGER;
+    const aTime = a.latestMessage ? new Date(a.latestMessage.createdAt).getTime() : new Date(a.createdAt).getTime();
+    const bTime = b.latestMessage ? new Date(b.latestMessage.createdAt).getTime() : new Date(b.createdAt).getTime();
 
     // Compare the creation time
     return bTime-aTime;
