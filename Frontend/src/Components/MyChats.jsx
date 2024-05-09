@@ -18,6 +18,14 @@ const MyChats = ({ fetchAgain }) => {
   let unreadMessages = {}
   const toast = useToast()
 
+  const comparator = (a, b) => {
+    // Get the creation time of the latest message of each object
+    const aTime = a.latestMessage ? new Date(a.latestMessage.createdAt).getTime() : Number.MIN_SAFE_INTEGER;
+    const bTime = b.latestMessage ? new Date(b.latestMessage.createdAt).getTime() : Number.MIN_SAFE_INTEGER;
+
+    // Compare the creation time
+    return bTime-aTime;
+};
 
   const fetchChats = async () => {
     // console.log(user.id);
@@ -29,6 +37,7 @@ const MyChats = ({ fetchAgain }) => {
       };
       setChatLoading(firstFetch)
       const { data } = await axios.get(`${import.meta.env.VITE_APP_BACKEND_API}/chat`, config);
+      data.sort(comparator)
       setChatLoading(false)
       setFirstFetch(false)
       console.log("chats: ", data)
