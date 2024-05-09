@@ -51,6 +51,11 @@ const createNewMessage = async (userId, content, chatId) => {
             },
             chat: {
                 connect: { id: chatId }
+            },
+            readers:{
+                connect:{
+                    id:userId
+                }
             }
         },
         include: {

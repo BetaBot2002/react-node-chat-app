@@ -158,17 +158,25 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }, [selectedChat]);
 
     useEffect(() => {
+        readAllMessages()
+    }, [fetchAgain]);
+
+    useEffect(() => {
         socket.on("message received", async (newMessageReceived) => {
             if (!selectedChatCompare || selectedChatCompare.id !== newMessageReceived.chat.id) {
-                setUnreadMessagesByChatId({
-                    ...unreadMessagesByChatId,
-                    [newMessageReceived.chat.id]: [...(unreadMessagesByChatId[newMessageReceived.chat.id] || []), newMessageReceived]
-                })
+                // setUnreadMessagesByChatId({
+                //     ...unreadMessagesByChatId,
+                //     [newMessageReceived.chat.id]: [...(unreadMessagesByChatId[newMessageReceived.chat.id] || []), newMessageReceived]
+                // })
             } else {
                 setMessages([...messages, newMessageReceived])
                 console.log(newMessageReceived.id)
-                await readSingleMessage(newMessageReceived.id)
+                // await readSingleMessage(newMessageReceived.id)
             }
+            setUnreadMessagesByChatId({
+                ...unreadMessagesByChatId,
+                [newMessageReceived.chat.id]: [...(unreadMessagesByChatId[newMessageReceived.chat.id] || []), newMessageReceived]
+            })
             setLatestMessagesByChatId({
                 ...latestMessagesByChatId,
                 [newMessageReceived.chat.id]: newMessageReceived
@@ -204,7 +212,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     ...latestMessagesByChatId,
                     [selectedChat.id]: data
                 })
-                await readSingleMessage(data.id)
+                // await readSingleMessage(data.id)
                 setFetchAgain(!fetchAgain)
             } catch (error) {
                 toast({
