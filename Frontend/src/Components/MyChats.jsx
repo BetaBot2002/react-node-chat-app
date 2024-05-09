@@ -13,9 +13,11 @@ import GroupChatModal from './Miscellaneous/GroupChatModal'
 const MyChats = ({ fetchAgain }) => {
   const { user, selectedChat, setSelectedChat, chats, setChats, latestMessagesByChatId, setLatestMessagesByChatId, unreadMessagesByChatId, setUnreadMessagesByChatId } = ChatState()
   const [chatLoading, setChatLoading] = useState();
+  const [firstFetch, setFirstFetch] = useState(true);
   let latestMessages = {}
   let unreadMessages = {}
   const toast = useToast()
+
 
   const fetchChats = async () => {
     // console.log(user.id);
@@ -25,9 +27,10 @@ const MyChats = ({ fetchAgain }) => {
           Authorization: `Bearer ${await getAccessToken()}`,
         },
       };
-      setChatLoading(true)
+      setChatLoading(firstFetch)
       const { data } = await axios.get(`${import.meta.env.VITE_APP_BACKEND_API}/chat`, config);
       setChatLoading(false)
+      setFirstFetch(false)
       console.log("chats: ", data)
       data.forEach(chat => {
         if (chat.latestMessage) {
