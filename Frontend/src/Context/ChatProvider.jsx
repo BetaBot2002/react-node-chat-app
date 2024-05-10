@@ -25,7 +25,6 @@ const ChatProvider = ({ children }) => {
             setUser(user)
             return user
         } catch (error) {
-            console.log(error)
             return {}
         }
     }
@@ -33,7 +32,6 @@ const ChatProvider = ({ children }) => {
     useEffect(() => {
         getUser()
             .then(result => {
-                console.log(result);
             })
     }, [])
 

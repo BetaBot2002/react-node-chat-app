@@ -31,7 +31,6 @@ const GroupChatModal = ({ children }) => {
                 }
             }
             const { data } = await axios.get(api_url, config)
-            console.log(data)
             setLoading(false)
             setSearchResults(data)
         } catch (error) {
@@ -87,7 +86,6 @@ const GroupChatModal = ({ children }) => {
                 }
             }
             const { data } = await axios.post(api_url, body, config)
-            console.log(data)
             setChats([data, ...chats])
             onClose();
             toast({

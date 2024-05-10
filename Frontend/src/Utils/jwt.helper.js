@@ -27,11 +27,9 @@ const getAccessToken=async ()=>{
 
         })
         const data=await response.json()
-        console.log(data)
         setAccessToken(data.accessToken)
         return data.accessToken
     } catch (error) {
-        console.log(error)
         return ''
     }
 }

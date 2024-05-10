@@ -52,7 +52,6 @@ const SideDrawer = () => {
 
       navigate("/registration")
     } catch (error) {
-      console.log(error)
       toast({
         title: `Something Went Wrong`,
         description: `Logout failed`,
@@ -86,7 +85,6 @@ const SideDrawer = () => {
         }
       }
       const { data } = await axios.get(api_url, config)
-      console.log(data)
       setLoading(false)
       setSearchResults(data)
 
@@ -103,7 +101,6 @@ const SideDrawer = () => {
   }
 
   const accessChat=async (receiverEmail) => {
-    console.log(receiverEmail);
 
     try {
       setLoadingChat(true);

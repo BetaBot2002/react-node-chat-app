@@ -58,11 +58,9 @@ const Signup = () => {
       body: formData
     }).then((res) => res.json())
       .then((data) => {
-        console.log(data)
         setImageUrl(data.url.toString())
         setLoading(false)
       }).catch((err) => {
-        console.log(err)
         setLoading(false)
       })
   }
@@ -83,7 +81,6 @@ const Signup = () => {
         }
       })
 
-      console.log(response.status)
       toast({
         title: 'User Registered',
         description: `User Registered with email: ${response.data.email}`,

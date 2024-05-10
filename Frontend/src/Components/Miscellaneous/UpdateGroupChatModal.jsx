@@ -56,7 +56,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchAllMessages }) =>
                 userid: userToBeAdded.id
             }
             const { data } = await axios.put(api_url, body, config)
-            console.log(data)
             setSelectedChat(data)
             setFetchAgain(!fetchAgain)
             setLoading(false)
@@ -99,7 +98,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchAllMessages }) =>
                 userid: userToBeRemoved.id
             }
             const { data } = await axios.put(api_url, body, config)
-            console.log(data)
             userToBeRemoved.id===user.id? setSelectedChat():setSelectedChat(data)
             setFetchAgain(!fetchAgain)
             fetchAllMessages()
@@ -133,7 +131,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchAllMessages }) =>
                 newname: groupChatName
             }
             const { data } = await axios.put(api_url, body, config)
-            console.log(data)
             setSelectedChat(data)
             setFetchAgain(!fetchAgain)
             setRenameLoading(false)
@@ -164,7 +161,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchAllMessages }) =>
                 }
             }
             const { data } = await axios.get(api_url, config)
-            console.log(data)
             setLoading(false)
             setSearchResults(data)
         } catch (error) {

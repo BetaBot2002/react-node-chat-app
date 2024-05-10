@@ -27,7 +27,6 @@ const Login = () => {
           "Content-type": "application/json",
         }
       })
-      console.log(response.data)
       setAccessToken(response.data.accessToken)
       setRefreshToken(response.data.refreshToken)
       localStorage.setItem("userId",response.data.userId)

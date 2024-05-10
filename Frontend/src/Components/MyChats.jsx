@@ -28,7 +28,6 @@ const MyChats = ({ fetchAgain }) => {
 };
 
   const fetchChats = async () => {
-    // console.log(user.id);
     try {
       const config = {
         headers: {
@@ -40,7 +39,6 @@ const MyChats = ({ fetchAgain }) => {
       data.sort(comparator)
       setChatLoading(false)
       setFirstFetch(false)
-      console.log("chats: ", data)
       data.forEach(chat => {
         if (chat.latestMessage) {
           latestMessages[chat.id] = chat.latestMessage //We Cannot directly use setLatestMessagesByChatId() inside forEach as the state does not updates immediately

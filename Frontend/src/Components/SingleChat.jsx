@@ -71,8 +71,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         if (!selectedChat) return
         if (!unreadMessagesByChatId[selectedChat.id] || !unreadMessagesByChatId[selectedChat.id].length) return
         let unreadMessagesString = JSON.stringify(unreadMessagesByChatId[selectedChat.id].map(msg=>{return msg.id}))
-        console.log(unreadMessagesString)
-        console.log(unreadMessagesByChatId)
+
         try {
             const config = {
                 headers: {
@@ -87,7 +86,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             }
             const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/message/read`
             const { data } = await axios.post(api_url, body, config);
-            console.log("updatedChats ",data)
             setUnreadMessagesByChatId({
                 ...unreadMessagesByChatId,
                 [selectedChat.id]: []
@@ -121,7 +119,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             }
             const api_url = `${import.meta.env.VITE_APP_BACKEND_API}/message/read`
             const { data } = await axios.post(api_url, body, config);
-            console.log("updatedChats ",data)
         } catch (error) {
             toast({
                 title: "Error Occured!",
@@ -170,7 +167,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 // })
             } else {
                 setMessages([...messages, newMessageReceived])
-                console.log(newMessageReceived.id)
                 // await readSingleMessage(newMessageReceived.id)
             }
             setUnreadMessagesByChatId({
@@ -233,7 +229,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         setNewMessage(e.target.value)
 
         if (!socketConnected) {
-            console.log("Socket not connected")
             return
         }
         if (!typing) {
