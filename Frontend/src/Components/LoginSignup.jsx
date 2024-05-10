@@ -1,5 +1,4 @@
 import React from 'react'
-import '../CSS/LoginSignup.css'
 import { Colors } from '../Utils/CSS-Variables.js'
 import { Box, Container, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
 import Login from './Authentication/Login'
