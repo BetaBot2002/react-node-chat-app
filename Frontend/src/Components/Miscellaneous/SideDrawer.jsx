@@ -159,7 +159,7 @@ const SideDrawer = () => {
           px={'16px'}
           textAlign={'center'}
         >
-          Chattery 🦆
+          NewSpeak 🗣️
         </Text>
         <div>
           <Menu>

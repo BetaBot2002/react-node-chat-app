@@ -25,7 +25,7 @@ const LoginSignup = () => {
           fontWeight={'bold'}
           letterSpacing={'2px'}
           color={Colors.theme_lavender}
-        >Chattery 🦆</Text>
+        >NewSpeak <span style={{filter:`brightness(200%)`}}>🗣️</span></Text>
       </Box>
       <Box
         p={4}
