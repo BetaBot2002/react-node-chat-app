@@ -160,14 +160,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     useEffect(() => {
         socket.on("message received", async (newMessageReceived) => {
-            if (!selectedChatCompare || selectedChatCompare.id !== newMessageReceived.chat.id) {
-                // setUnreadMessagesByChatId({
-                //     ...unreadMessagesByChatId,
-                //     [newMessageReceived.chat.id]: [...(unreadMessagesByChatId[newMessageReceived.chat.id] || []), newMessageReceived]
-                // })
-            } else {
+            if (selectedChatCompare && selectedChatCompare.id === newMessageReceived.chat.id) {
                 setMessages([...messages, newMessageReceived])
-                // await readSingleMessage(newMessageReceived.id)
             }
             setUnreadMessagesByChatId({
                 ...unreadMessagesByChatId,
