@@ -9,7 +9,7 @@
     "hotload": "nodemon server.js",
     "dev": "node server.js",
     "start": "node server.js",
-    "build":"npx prisma generate"
+    "build":"prisma generate && echo \"No build steps necessary for backend\""
   },
   "keywords": [],
   "author": "",
