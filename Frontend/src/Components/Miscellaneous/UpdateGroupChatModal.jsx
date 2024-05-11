@@ -197,7 +197,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchAllMessages }) =>
                                     key={selectedUser.id}
                                     user={selectedUser}
                                     handleDelete={() => handleRemove(selectedUser)}
-                                    admin={user}
+                                    admin={selectedChat.admins[0]}
                                 />
                             ))}
                         </Box>
