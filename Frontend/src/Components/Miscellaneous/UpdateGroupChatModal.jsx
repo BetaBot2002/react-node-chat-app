@@ -75,7 +75,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchAllMessages }) =>
     const handleRemove = async (userToBeRemoved) => {
         if (!selectedChat.adminIds.includes(user.id) && userToBeRemoved.id!==user.id) {
             toast({
-                title: "Only admins can add someone!",
+                title: "Only admins can remove someone!",
                 status: "error",
                 duration: 5000,
                 isClosable: true,
