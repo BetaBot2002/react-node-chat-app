@@ -152,6 +152,27 @@ const addUserToGroup = async (chatId, userId, adminId) => {
 }
 
 const removeUserFromGroup = async (chatId, userId, adminId) => {
+    if(userId===adminId){
+        return await prisma.chats.update({
+            where: {
+                id: chatId
+            },
+            data: {
+                users: {
+                    disconnect: { id: userId }
+                }
+            },
+            include: {
+                users: {
+                    select: selectedUserFields
+                },
+                admins: {
+                    select: selectedUserFields
+                }
+            }
+        })
+    }
+
     return await prisma.chats.update({
         where: {
             id: chatId,

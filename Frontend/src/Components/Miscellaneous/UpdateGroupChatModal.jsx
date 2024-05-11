@@ -105,7 +105,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchAllMessages }) =>
         } catch (error) {
             toast({
                 title: "Error Occured!",
-                description: "Failed to remove user from the group",
+                description: "Failed to remove user from the group"+error,
                 status: "error",
                 duration: 5000,
                 isClosable: true,

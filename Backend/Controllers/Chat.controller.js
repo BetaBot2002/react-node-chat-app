@@ -100,6 +100,7 @@ const removeFromGroup = async (req, res) => {
         console.log(updatedChatWithRemovedUser)
         res.status(200).send(updatedChatWithRemovedUser)
     } catch (error) {
+        console.log(error)
         res.status(404).send({
             message: "USER_NOT_ADMIN",
             code: CustomStatusCodes.USER_NOT_FOUND
