@@ -18,7 +18,6 @@ const UserBadgeItem = ({ user, handleDelete, admin }) => {
             onClick={handleDelete}
         >
             {user.name}
-            {admin.id === user.id && <span> (Admin)</span>}
             <CloseIcon pl={1} />
         </Badge>
     );

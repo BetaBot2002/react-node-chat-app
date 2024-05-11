@@ -3,6 +3,7 @@ import React from 'react'
 import ScrollableFeed from 'react-scrollable-feed'
 import { ChatState } from '../Context/ChatProvider'
 import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser } from '../Utils/chat.helper'
+import { Colors } from '../Utils/CSS-Variables'
 
 const ScrollableChat = ({ messages }) => {
     const { user } = ChatState()
@@ -31,7 +32,7 @@ const ScrollableChat = ({ messages }) => {
                     }
                     <span
                         style={{
-                            backgroundColor: `${message.sender.id === user.id ? "#BEE3F8" : "#B9F5D0"}`,
+                            backgroundColor: `${message.sender.id === user.id ? Colors.theme_chat_blue : Colors.theme_chat_green}`,
                             borderRadius: "20px",
                             padding: "5px 15px",
                             maxWidth: "75%",

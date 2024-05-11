@@ -8,6 +8,8 @@ const Colors={
     theme_dark_lavender:'#553c9a',
     theme_blue_gray:'#4a5568',
     theme_light_green:'#4eab70',
+    theme_chat_blue:"#81C9F1",
+    theme_chat_green:"#7EEDA8"
 }
 
 export {
