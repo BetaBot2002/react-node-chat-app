@@ -12,6 +12,7 @@ NewSpeak is a real-time chat application built with React, Chakra UI, Node.js, S
     - [Environment Variables](#environment-variables)
       - [Backend](#backend)
       - [Frontend](#frontend)
+    - [Prisma](#prisma)
   - [Running the Application](#running-the-application)
     - [Backend](#backend-1)
     - [Frontend](#frontend-1)
@@ -75,6 +76,22 @@ VITE_APP_CLOUDINARY_UPLOAD_PRESET="your_cloudinary_upload_preset"
 VITE_APP_CLOUDINARY_CLOUD_NAME="your_cloudinary_cloud_name"
 VITE_APP_CLOUDINARY_API_BASE_URL_IMAGE="your_cloudinary_api_base_url"
 VITE_APP_BACKEND_API="http://127.0.0.1:3001"
+```
+
+### Prisma
+
+After setting up the environment variables, generate the Prisma client:
+
+1. Navigate to the `Backend` directory:
+
+```bash
+cd Backend
+```
+
+2. Run the Prisma generate command:
+
+```bash
+npx prisma generate
 ```
 
 ## Running the Application
@@ -152,6 +169,6 @@ Feel free to fork this repository and submit pull requests.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE.md) file for details.
 
 ---
